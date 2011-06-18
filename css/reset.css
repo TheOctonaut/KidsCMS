@@ -1,0 +1,30 @@
+/* RESET CSS FILE */
+
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,
+pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,
+samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,
+legend,table,caption,tbody,tfoot,thead,tr,th,td {border:0; outline:0; vertical-align:middle; background:transparent; margin:0; padding:0; font-family: Verdana, Geneva, sans-serif;}
+* {margin:0; padding:0; }
+a img { border:0; }
+
+/*
+This is called the clearfix "hack" to prevent container from colapsing
+in on itself when all the elements inside are floated elements.
+Make sure to add --[ class="container" ]-- to any object that you
+don't want to colapse.
+*/
+
+.container:after { visibility: hidden; display: block; font-size:0; content: " "; clear: both; height: 0; }
+
+/* start commented backlash hack \*/
+
+* html .container   { height: 1%;     }
+.container          { display: block; }
+
+/* close commented backlash hack */
+
+/* Easy way for me to float items */
+
+.floatleft 	{ float:left;       }
+.floatright 	{ float:right;      }
+.floatmiddle 	{ margin: 0px auto; }

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : ga.xml
+    Created on : April 14, 2011, 1:14 PM
+    Author     : gavin
+    Description:
+        Language file for KidsCMS
+-->
+
+<language code="ga" name="Gaeilge">
+    <lang>Teanga</lang>
+    <greeting>Fáilte romhat</greeting>
+    <login>Sínigh Isteach</login>
+    <logout>Sínigh Amach</logout>
+    <register>Sínigh Suas</register>
+    <email>Ríomhphost</email>
+    <password>Pasfhocal</password>
+    <contact_number>Uimhir Guthán</contact_number>
+    <retype_password>Athscríobh Pasfhocal</retype_password>
+    <name>Ainm</name>
+    <display_name>Ainm Úsáideoira</display_name>
+    <group>Grúpa</group>
+    <groups>Grúpaí</groups>
+    <id>ID</id>
+    <lastlogin>Uair deireanach</lastlogin>
+    <manage>Bainistigh</manage>
+    <user>Úsáideoir</user>
+    <users>Úsáideoirí</users>
+    <home>Baile</home>
+    <admin>Riarachán</admin>
+    <captcha>Seiceáil Slándáil</captcha>
+    <captcha_help>Scriobh na focail mar a fheiceann tú iad. Stadann sé seo aon 'víreas' síniú suas.</captcha_help>
+    <or>nó</or>
+    <power>Cumhacht</power>
+    <delete>Scrios</delete>
+    <edit>Eagar</edit>
+    <none_found>Níl aon rud atá ar fáil</none_found>
+    <confirm_delete>An bhfuil tú cinnte gur mian leat seo a scriosadh? Ní féidir leat é a chur ar ais ar an mhír ina dhiaidh sin.</confirm_delete>
+    <password_help>Caithfidh sé bheith idir 5 agus 12 carachtair, ar a laghad uimhir amháin agus litir amháin san áireamh, agus gan aon carachtair speisialta.</password_help>
+    <loginfail>Tá an ríomhphost nó pasfhocal mícheart. Triail arís é, le do thoil!</loginfail>
+    <activationsuccess>Go raibh maith agat, tá do chuntas i ngníomh anois. Is ball den suíomh thú anois.</activationsuccess>
+    <no_permission>Níl cead agat an áis seo a úsáid.</no_permission>
+    <create_user>Cruthaigh Úsáideoir Nua</create_user>
+    <creating_new_user>Úsáideoir Nua a Chruthú</creating_new_user>
+    <editing_user>Eagarthóireacht ar Úsáideoir</editing_user>
+    <create_group>Cruthaigh Grúpa Nua</create_group>
+    <creating_new_group>Grúpa Nua a Chruthú</creating_new_group>
+    <editing_group>Eagarthóireacht ar Ghrúpa</editing_group>
+    <temp_pass>Beidh pasfhocal sealadach cruthaithe don úsáideoir nua agus seolta chuig a seoladh riomhphoist.</temp_pass>
+</language>

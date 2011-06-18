@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : en-GB.xml
+    Created on : April 14, 2011, 1:14 PM
+    Author     : gavin
+    Description:
+        Purpose of the document follows.
+-->
+
+<language code="ja" name="Japanese">
+    <lang>言語</lang>
+    <greeting>ようこそ</greeting>
+    <login>ログイン</login>
+    <logout>ログアウト</logout>
+    <register>レジスタ</register>
+    <email>Eメール</email>
+    <password>パスワード</password>
+    <contact_number>電話</contact_number>
+    <retype_password>書き換えパスワード</retype_password>
+    <name>名</name>
+    <display_name>ユーザー名</display_name>
+    <captcha>セキュリティチェック</captcha>
+    <captcha_help>あなたがそれらを見るように単語を入力してください。これは、サインアップからスパマーを停止します。</captcha_help>
+    <or>または他の</or>
+    <password_help>これは、少なくとも1つずつアルファベットの文字を数字が含まれ、5〜12文字でなければならない特殊文字を含めることはできません</password_help>
+    <loginfail>電子メールアドレスまたはパスワードが与え間違っています。もう一度お試しください！</loginfail>
+    <activationsuccess>アカウントを有効にしていただきありがとうございます。これで、メンバーとしてのWebサイトを使用することができます。</activationsuccess>
+    <no_permission>あなたはこのリソースにアクセスするための十分な権限がありません。</no_permission>
+</language>

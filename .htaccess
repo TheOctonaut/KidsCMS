@@ -1,0 +1,5 @@
+DirectoryIndex index.php index.html Home.html
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html
+## Options +FollowSymLinks
+## RewriteEngine On

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : en-GB.xml
+    Created on : April 14, 2011, 1:14 PM
+    Author     : gavin
+    Description:
+        Purpose of the document follows.
+-->
+
+<language code="th" name="Thai">
+    <lang>ภาษา</lang>
+    <greeting>ยินดีต้อนรับ</greeting>
+    <login>เข้าสู่ระบบ</login>
+    <logout>ออกจากระบบ</logout>
+    <register>สมัครสมาชิก</register>
+    <email>Email</email>
+    <password>รหัสผ่าน</password>
+    <contact_number>หมายเลขติดต่อ</contact_number>
+    <retype_password>พิมพ์ซ้ำรหัสผ่าน</retype_password>
+    <name>ชื่อ</name>
+    <display_name>ชื่อผู้ใช้</display_name>
+    <captcha>ตรวจสอบความปลอดภัย</captcha>
+    <captcha_help>พิมพ์คำที่คุณเห็นพวกเขา นี้หยุดสแปมเมอร์จากการสมัคร</captcha_help>
+    <or>หรือ</or>
+    <password_help>ต้องอยู่ระหว่าง 5 และ 12 ตัวอักษร, มีอย่างน้อยหนึ่งตัวเลขและตัวอักษรหนึ่งตัวอักษรและต้องไม่มีอักขระพิเศษ</password_help>
+    <loginfail>ที่อยู่อีเมลหรือรหัสผ่านที่คุณให้ไม่ถูกต้อง โปรดลองอีกครั้ง</loginfail>
+    <activationsuccess>ขอขอบคุณสำหรับการเปิดใช้งานบัญชีของคุณ ขณะนี้คุณสามารถใช้เว็บไซต์เป็นสมาชิก</activationsuccess>
+    <no_permission>คุณไม่ได้รับสิทธิ์เพียงพอที่จะเข้าถึงทรัพยากรนี้.</no_permission>
+</language>

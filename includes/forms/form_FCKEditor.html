@@ -1,0 +1,226 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>Forms class documentation apendix: FCKEditor</title>
+	</head>
+	<body>
+		<center><h1>Forms class documentation apendix: FCKEditor</h1></center>
+		<hr />
+		<ul>
+			<li>
+				<p><b>Author:</b> Mat&iacute;as Montes (<a href="mailto:montesmatias-at-gmail.com">montesmatias-at-gmail.com</a>)</p>
+				<h2>Contents</h2>
+			</li>
+			<li>
+				<a href="#form_fckeditor1">form_fckeditor</a>
+				<ul>
+					<li><a href="#form_fckeditor1.1">Purpose</a></li>
+					<li><a href="#form_fckeditor1.2">Features</a></li>
+					<li><a href="#form_fckeditor1.3">Required</a></li>
+					<li><a href="#form_fckeditor1.4">ToDo List</a></li>
+					<li>
+						<a href="#form_fckeditor1.5">Properties</a>
+						<ul>
+							<li><a href="#form_fckeditor1.5.1">BasePath</a></li>
+							<li><a href="#form_fckeditor1.5.2">Config</a></li>
+							<li><a href="#form_fckeditor1.5.3">FCKSource</a></li>
+							<li><a href="#form_fckeditor1.5.4">HEIGHT</a></li>
+							<li><a href="#form_fckeditor1.5.5">ONCOMPLETE</a></li>
+							<li><a href="#form_fckeditor1.5.6">Skin</a></li>
+							<li><a href="#form_fckeditor1.5.7">ToolbarSet</a></li>
+							<li><a href="#form_fckeditor1.5.8">VALUE</a></li>
+							<li><a href="#form_fckeditor1.5.9">WIDTH</a></li>
+							<li><a href="#form_fckeditor1.5.10">Accessible</a></li>
+							<li><a href="#form_fckeditor1.5.11">PlainText</a></li>
+						</ul>
+					</li>
+					<li><a href="#form_fckeditor1.6">Version History</a></li>
+				</ul>
+			</li>
+		</ul>
+		<ul>
+			<li>
+				<a name="form_fckeditor1"></a>
+				<tt><strong>form_fckeditor</strong></tt>
+				<ul>
+					<li>
+						<a name="form_fckeditor1.1"></a>
+						<h3>Purpose</h3>
+						<p>This custom input lets the user create or edit html content using the popular FCKEditor interface</p>
+					</li>
+					<li>
+						<a name="form_fckeditor1.2"></a>
+						<h3>Features</h3>
+						<ul>
+							<li>The <a href="http://www.fckeditor.net/">FCKEditor</a> interface is used to visualize and edit the html.</li>
+							<li>The editor provides a custom event, ONCOMPLETE, that would trigger when the editor is fully loaded</li>
+							<li>Allows multiple FCKEditor inputs</li>
+							<li>Alternative TEXTAREA input when the detected browser is not FCKEditor-compatible</li>
+							<li>Supports skin customization</li>
+							<li>Supports language customization</li>
+						</ul>
+					</li>
+					<li>
+						<a name="form_fckeditor1.3"></a>
+						<h3>Required</h3>
+						<ul>
+							<li>
+								<strong>Manuel Lemos' Form Creation and Validation class</strong>
+								<p>This is a plugin to the main <a href="http://www.phpclasses.org/browse/package/1.html">forms class</a>, so the main class is obviously required. You can download it at <a href="www.phpclasses.org">PHPClasses</a></p>
+							</li>
+							<li>
+								<p><strong>FCKEditor software</strong></p>
+								<p>You need to download the FCKEditor software at <a href="http://www.fckeditor.net/download/">http://www.fckeditor.net/download/</a> and specify the installation path when adding the input.</p>
+							</li>
+							<li>
+								<p><strong>Page Head</strong></p>
+								<p>When using the ONCOMPLETE event, the input creates javascript code to handle it, which should be added to the page head using the main form class <tt>PageHead</tt> function.</p>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a name="form_fckeditor1.4"></a>
+						<h3>ToDo List</h3>
+						<ul>
+							<li>
+								<p><strong>In-Code documentation</strong></p>
+								<p>The code lacks documentation in which I'll work for the next release</p>
+							</li>
+							<li>
+								<p><strong>Validation</strong></p>
+								<p>There is currently no validation for the input. I'm planning on defining minimum/maximum length and word count validations and XML validation but haven't come up with some more useful validations. Suggestions are appreciated.</p>
+							</li>
+							<li>
+								<p><strong>Missing properties</strong></p>
+								<p>The following properties are not yet supported but are intended to be</p>
+								<ul>
+									<li><tt>ValidationErrorMessage</tt></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a name="form_fckeditor1.5"></a>
+						<h3>Properties</h3>
+						<ul>
+
+							<li>
+								<a name="form_fckeditor1.5.1"></a>
+								<p><tt>BasePath</tt> (required)</p>
+								<p>The path to where the FCKEditor files are located. It should contain the whole http path to the folder starting after the domain name</p>
+								<p>
+									<strong>Example Value:</strong><br />
+									If your files are located at http://www.mysite.com/fckeditor/use_this_files/<br />
+									BasePath value should be: "/fckeditor/use_this_files/"<br />
+									Notice the starting and trailing slashes ("/")
+								</p>
+								<p><strong>Default Value: not set</strong></p>
+							</li>
+
+							<li>
+								<a name="form_fckeditor1.5.2"></a>
+								<p><tt>Config</tt></p>
+								<p>An associative array that takes pairs of configuration parameters and their respective values</p>
+								<p>Read the <a href="http://wiki.fckeditor.net/Developer%27s_Guide/Configuration/Configurations_Settings">FCKEditor documentation</a> for a list of the posible configuration parameters</p>
+								<p><strong>Note:</strong> If you set the SkinPath config using this argument, it will override the skin set using the <tt>Skin</tt> argument. <tt>Config</tt> is considered fore more advanced users, <tt>Skin</tt> is an easy alternative for the regular users as it automaticaly calculates the path</p>
+								<p><strong>Default Value: Not Set</strong></p>
+							</li>
+
+							<li>
+								<a name="form_fckeditor1.5.3"></a>
+								<p><tt>FCKSource</tt></p>
+								<p>
+									A boolean value to force FCKEditor to load the _source files.<br />
+									Read the <a href="http://wiki.fckeditor.net/Developer%27s_Guide/Customization/Scripts_Compression?highlight=%28original%29">FCKEditor documentation</a> for further explanation
+								</p>
+								<p><strong>Default Value: 0</strong></p>
+							</li>
+
+							<li>
+								<a name="form_fckeditor1.5.4"></a>
+								<p><tt>HEIGHT</tt> (changeable)</p>
+								<p>An integer or percentual value that defines the height of the editor</p>
+								<p><strong>Example Values: 200 "20%"</strong></p>
+								<p><strong>Default Value: 200</strong></p>
+							</li>
+
+							<li>
+								<a name="form_fckeditor1.5.5"></a>
+								<p><tt>ONCOMPLETE</tt></p>
+								<p>String of Javascript code to be executed when the editor finishes loading</p>
+								<p><strong>Default Value: ""</strong></p>
+							</li>
+
+							<li>
+								<a name="form_fckeditor1.5.6"></a>
+								<p><tt>Skin</tt></p>
+								<p>
+									Name of the folder with the preferred skin.<br />
+									Is used to automatically generate the SkinPath config key</p>
+								<p><strong>Default Value: not set</strong></p>
+							</li>
+
+							<li>
+								<a name="form_fckeditor1.5.7"></a>
+								<p><tt>ToolbarSet</tt></p>
+								<p>A string with the name of the Toolbar Set to use</p>
+								<p><strong>Default Value: "Default"</strong></p>
+							</li>
+
+							<li>
+								<a name="form_fckeditor1.5.8"></a>
+								<p><tt>VALUE</tt></p>
+								<p>The HTML code to be edited</p>
+								<p><strong>Default Value: ""</strong></p>
+							</li>
+
+							<li>
+								<a name="form_fckeditor1.5.9"></a>
+								<p><tt>WIDTH</tt> (changeable)</p>
+								<p>An integer or percentual value that defines the width of the editor</p>
+								<p><strong>Example Values: 200 "20%"</strong></p>
+								<p><strong>Default Value: "100%"</strong></p>
+							</li>
+
+							<li>
+								<a name="form_fckeditor1.5.10"></a>
+								<p><tt>Accessible</tt> (changeable)</p>
+								<p>The same as the Accessible property for basic inputs.</p>
+								<p><strong>Note:</strong> The editor might break when using the main class <tt>ReadOnly</tt> attribute and the input <tt>Accessible</tt> attribute set to 1.</p>
+								<p><strong>Default Value: 1</strong></p>
+							</li>
+
+							<li>
+								<a name="form_fckeditor1.5.11"></a>
+								<p><tt>PlainText</tt></p>
+								<p>All HTML tags will be stripped when input values are loaded.</p>
+								<p><strong>Default Value: 0</strong></p>
+							</li>
+
+						</ul>
+					</li>
+					<li>
+						<a name="form_fckeditor1.6"></a>
+						<h3>Version History</h3>
+						<ul>
+							<li>
+								2006-12-26: Re-coded the bug-fix.<br />
+								Added <tt>CustomClass</tt>, <tt>ONCOMPLETE</tt> and <tt>InstanceName</tt> properties to the <tt>GetInputProperty</tt> method<br />
+								Added <tt>PlainText</tt> support
+							</li>
+							<li>
+								2006-11-26: Fixed a bug in ClassPageHead that disrupted the PageHead function of the main class.<br />
+								Fixed a bug with the alternative textarea input.<br />
+								Added <tt>Accessible</tt> support
+							</li>
+							<li>2006-11-18: Added <tt>LABEL</tt> support</li>
+							<li>2006-11-17: Replaced individual config arguments for a single Config argument. Updated documentation and example</li>
+							<li>2006-11-14: Released beta version for testing and feedback</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+
+		</ul>
+	</body>
+</html>

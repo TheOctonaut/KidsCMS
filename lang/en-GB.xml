@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : en-GB.xml
+    Created on : April 14, 2011, 1:14 PM
+    Author     : gavin
+    Description:
+        Language file for KidsCMS
+-->
+
+<language code="en-GB" name="English (UK)">
+    <lang>Language</lang>
+    <greeting>Welcome</greeting>
+    <login>Log In</login>
+    <logout>Log Out</logout>
+    <register>Register</register>
+    <email>Email</email>
+    <password>Password</password>
+    <contact_number>Contact Number</contact_number>
+    <retype_password>Retype password</retype_password>
+    <name>Name</name>
+    <display_name>Display Name</display_name>
+    <group>Group</group>
+    <groups>Groups</groups>
+    <id>ID</id>
+    <lastlogin>Last Login</lastlogin>
+    <manage>Manage</manage>
+    <user>User</user>
+    <users>Users</users>
+    <home>Home</home>
+    <admin>Admin</admin>
+    <captcha>Security Check</captcha>
+    <captcha_help>Type the words as you see them. This stops 'virus' programs from signing up.</captcha_help>
+    <or>or</or>
+    <power>Power</power>
+    <delete>Delete</delete>
+    <edit>Edit</edit>
+    <none_found>None found.</none_found>
+    <confirm_delete>Really delete this? This cannot be undone.</confirm_delete>
+    <password_help>Must be between 5 and 12 characters, contain at least one digit and one alphabetic character, and must not contain special characters.</password_help>
+    <loginfail>The email address or password is incorrect. Please try again!</loginfail>
+    <activationsuccess>Thank you for activating your account. You can now use the website as a member.</activationsuccess>
+    <no_permission>You do not have sufficient permission to access this resource.</no_permission>
+    <create_user>Create New User</create_user>
+    <creating_new_user>Creating New User</creating_new_user>
+    <editing_user>Editing User</editing_user>
+    <create_group>Create New Group</create_group>
+    <creating_new_group>Creating New Group</creating_new_group>
+    <editing_group>Editing Group</editing_group>
+    <temp_pass>A temporary password will be sent to the new user's email address.</temp_pass>
+    <saved_user>User data saved!</saved_user>
+    <saved_user_error>There was an error saving the user.</saved_user_error>
+    <saved_user_group>User Group data saved!</saved_user_group>
+    <saved_user_group_error>There was an error saving the user group.</saved_user_group_error>
+    <invalid_user_id>Invalid user ID.</invalid_user_id>
+    <invalid_user_name>Invalid user Name. Ensure the name is at least 3 characters long.</invalid_user_name>
+    <invalid_user_display_name>Invalid user Display Name. Ensure the display name is at least 3 characters long.</invalid_user_display_name>
+    <invalid_user_email>Invalid user Email Address.</invalid_user_email>
+    <invalid_user_contact_number>Invalid user Contact Number. Please enter the digits only; phone numbers are required to be at least 7 digits long.</invalid_user_contact_number>
+    <invalid_user_user_group>Invalid user Group selection.</invalid_user_user_group>
+    <must_complete_form>Please ensure all required fields are completed.</must_complete_form>
+    <deleted_user>Successfully deleted the user.</deleted_user>
+    <deleted_user_error>There was an error deleting the user.</deleted_user_error>
+    <deleted_user_group>Successfully deleted the user group. Users in this group have been deactivated; You should <![CDATA[<a href="adminview.php?type=users">re-activate them now</a>]]>.</deleted_user_group>
+    <deleted_user_group_error>There was an error deleting the user group.</deleted_user_group_error>
+    <no_action_error>I'm not sure what you're trying to do.<![CDATA[<br /><iframe class="youtube-player" type="text/html" width="640" height="385" src="http://www.youtube.com/embed/oHg5SJYRHA0" frameborder="0"></iframe>]]></no_action_error>
+    <title_admin_edit>Administration - Editing Item</title_admin_edit>
+    <registration_invalid_email>Invalid email address.</registration_invalid_email>
+    <registration_invalid_name>Invalid name. Ensure the name contains at least 3 characters.</registration_invalid_name>
+    <registration_invalid_contact_number>Invalid contact number.</registration_invalid_contact_number>
+    <registration_invalid_password>Invalid password selected. Password must be between 5 and 12 characters, contain at least one digit and one alphabetic character, and must not contain special characters.</registration_invalid_password>
+    <registration_password_mismatch>The passwords you entered did not match. Please ensure you type the same password twice!</registration_password_mismatch>
+    <registration_complete>Registration complete! Please note you must validate your account before you have full access. Within a few minutes, you will receive an email message with a validation link.</registration_complete>
+</language>

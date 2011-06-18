@@ -1,0 +1,112 @@
+/*
+    Document   : default.css
+    Created on : Apr 14, 2011, 11:52:38 AM
+    Author     : Gavin Golden
+    Description:
+        CSS file for screen media that will control
+        the appearance of most elements..
+*/
+
+
+root {
+    display: block;
+}
+body.home {
+
+}
+body.home header {
+    margin-bottom:10px;
+}
+.body {
+    clear: both; margin: 0 auto; width: 800px;
+    margin-bottom: 5px;
+}
+.body h3 {
+    margin-bottom:1em;
+    margin-top:2em;
+}
+.feedback {
+    display: block;
+    background-color: #fff565;
+    padding:10px;
+    margin-bottom:10px;
+}
+img.feedbackicon {
+    float:left;
+}
+abbr.formhelp {
+    font-size: 0.6em;
+    color:red;
+    vertical-align: text-top;
+    text-decoration:underline;
+}
+abbr.formhelp:hover {
+    cursor:help;
+
+}
+.form {
+    width:442px;
+}
+.form h3 {
+    width:442px;
+}
+.form_half {
+    width: 221px;
+    float:left;
+}
+.login input, .form input {
+    border: 1px solid #DFDFDF;
+}
+.login label, .form label {
+    margin-top:5px;
+}
+.form label, .form input {
+    width:200px;
+    height:1.5em;
+}
+.login {
+    width: 350px;
+}
+.login h3 {
+    width: 300px;
+}
+.login label, .login input {
+    width: 300px;
+    height: 1.5em;
+}
+nav.body {
+    margin-bottom: 5px;
+}
+nav.body ul {
+    width: 800px;
+    height: 1.2em;
+    list-style: none;
+    display: block;
+    background-color: black;
+    color: white;
+    padding:0px;
+}
+nav.body ul li{
+    display: block;
+    height:1.2em;
+    float:left;
+    width:100px;
+}
+nav.body ul li a {
+    display: block;
+    height:1.2em;
+    width:100px;
+    color:white;
+    text-decoration: none;
+}
+nav.body ul li a:hover {
+    color:black;
+    background-color: white;
+    text-decoration: none;
+}
+menu.manage_options {
+    list-style: none;
+}
+menu.manage_options li {
+    float:left;
+}
