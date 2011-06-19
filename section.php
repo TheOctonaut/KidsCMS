@@ -76,6 +76,7 @@ if(isset($_SESSION["id"])){
           <h3>Articles in this Section</h3>
           <?php 
           $articles = $Section->getArticles();
+          if($articles){
           foreach ($articles as $a){
           ?>
           <ol>
@@ -85,6 +86,9 @@ if(isset($_SESSION["id"])){
               </li>
           </ol>
           <?php
+          }
+          } else {
+              ?><p>No articles found.</p><?
           }
       } else { ?>
             <h3><?php echo $lang->login; ?></h3>

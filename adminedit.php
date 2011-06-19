@@ -294,44 +294,48 @@ if($loggedin){
                                 <label for="contact_number"><?php echo $lang->contact_number;?>: </label>
                                 <input id="contact_number" name="contact_number" onkeyup="javascript:check(this.id);" /><span class="validator" id="contact_number_v"></span>
                             </div>
-                    <?php
-                    } else {
-                        $nu = new User();
-                        if($nu->getUserById($_GET["id"])){
-                                ?>
-                            <h3><?php echo $lang->editing_user . " #" . $nu->getID() ?></h3>
-                            <?php //include the feedback template
-                            include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/feedback.php"); ?>
-                            <div class="form_half">
-                                <label for="name"><?php echo $lang->name;?>: </label>
-                                <input id="name" name="name" onkeyup="javascript:check(this.id);" value="<? echo $nu->getName();?>" /><span class="validator" id="name_v"></span>
-                                <label for="email"><?php echo $lang->email;?>: </label>
-                                <input id="email" name="email" type="email" onkeyup="javascript:check(this.id);" value="<? echo $nu->getEmail();?>"/><span class="validator" id="email_v"></span>
-                                <label for="user_group">Group: </label><select id="user_group" name="user_group">
-                                <?php
-                                $gid =  $nu->getUserGroup();
-                                $sel = "";
-                                $ng = new UserGroup();
-                                $result = $ng->listUserGroups();
-                                while ($row = mysql_fetch_assoc($result)){
-                                    if($gid == $row["id"]){
-                                        $sel = " selected='selected'";
-                                    }
-                                    ?><option value="<?php echo $row["id"];?>"<?php echo $sel?>><?php echo $row["name"];?></option><?php
-                                    $sel = "";
-                                } ?></select>
-                            </div>
-                            <div class="form_half">
-                                <label for="display_name"><?php echo $lang->display_name;?>: </label>
-                                <input id="display_name" name="display_name" onkeyup="javascript:check(this.id);" value="<? echo $nu->getDisplayName();?>"/><span class="validator" id="display_name_v"></span>
-                                <label for="contact_number"><?php echo $lang->contact_number;?>: </label>
-                                <input id="contact_number" name="contact_number" onkeyup="javascript:check(this.id);" value="<? echo $nu->getContactNumber();?>"v/><span class="validator" id="contact_number_v"></span>
-                            </div>
                         <?php
-                    } //end if user exists check
-                } //end id set check
-                break;
-            } //end case switch
+                        } else {
+                            $nu = new User();
+                            if($nu->getUserById($_GET["id"])){
+                                    ?>
+                                <h3><?php echo $lang->editing_user . " #" . $nu->getID() ?></h3>
+                                <?php //include the feedback template
+                                include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/feedback.php"); ?>
+                                <div class="form_half">
+                                    <label for="name"><?php echo $lang->name;?>: </label>
+                                    <input id="name" name="name" onkeyup="javascript:check(this.id);" value="<? echo $nu->getName();?>" /><span class="validator" id="name_v"></span>
+                                    <label for="email"><?php echo $lang->email;?>: </label>
+                                    <input id="email" name="email" type="email" onkeyup="javascript:check(this.id);" value="<? echo $nu->getEmail();?>"/><span class="validator" id="email_v"></span>
+                                    <label for="user_group">Group: </label><select id="user_group" name="user_group">
+                                    <?php
+                                    $gid =  $nu->getUserGroup();
+                                    $sel = "";
+                                    $ng = new UserGroup();
+                                    $result = $ng->listUserGroups();
+                                    while ($row = mysql_fetch_assoc($result)){
+                                        if($gid == $row["id"]){
+                                            $sel = " selected='selected'";
+                                        }
+                                        ?><option value="<?php echo $row["id"];?>"<?php echo $sel?>><?php echo $row["name"];?></option><?php
+                                        $sel = "";
+                                    } ?></select>
+                                </div>
+                                <div class="form_half">
+                                    <label for="display_name"><?php echo $lang->display_name;?>: </label>
+                                    <input id="display_name" name="display_name" onkeyup="javascript:check(this.id);" value="<? echo $nu->getDisplayName();?>"/><span class="validator" id="display_name_v"></span>
+                                    <label for="contact_number"><?php echo $lang->contact_number;?>: </label>
+                                    <input id="contact_number" name="contact_number" onkeyup="javascript:check(this.id);" value="<? echo $nu->getContactNumber();?>"v/><span class="validator" id="contact_number_v"></span>
+                                </div>
+                            <?php
+                        } //end if user exists check
+                    } //end id set check
+                    break;
+                case "articles":
+                    $Article =& new Article();
+                    echo $Article->createHTMLEditForm();
+                    break;
+                } //end case switch
             ?><input type="submit" value="Save" /></form><?php
         } else {
             echo "<p>" . $lang->no_permission . "</p>";

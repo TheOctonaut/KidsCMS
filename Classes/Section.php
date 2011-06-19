@@ -136,6 +136,33 @@ class Section {
         return $result;
     }
     
+    function getSections() {
+        try {
+            if (cb_connect()) {
+                $result = mysql_query("SELECT * FROM sections");
+                if(mysql_num_rows($result) > 0){
+                    $sections = array();
+                    while($s = mysql_fetch_array($result)){
+                        //assign values to an article object
+                        $s =& new Section();
+                        $s->setId($row['id']);
+                        $s->setName($row['name']);
+                        $s->setSummary($row['summary']);
+                        $sections[]=$s;
+                    }
+                    return $sections;
+                } else {
+                    throw new Exception("No results.");
+                }
+            } else {
+                throw new Exception("Database connection failed.");
+            }
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
+    
     function getArticles() {
         try {
             if (cb_connect()) {

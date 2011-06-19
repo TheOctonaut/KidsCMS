@@ -3,7 +3,7 @@
 $subd = "/kidsacademy";
 include_once($_SERVER['DOCUMENT_ROOT'] . $subd . "/utilities.php");
 
-class Section {
+class Article {
 
     private $id;
     private $title;
@@ -85,26 +85,31 @@ class Section {
     }
 
     function getArticleById($id) {
-        $status = false;
-        if (cb_connect()) {
-            $query = "SELECT * FROM articles WHERE id = " . $id . " LIMIT 0,1";
-            $result = mysql_query($query);
-            if (mysql_num_rows($result) > 0) {
-                $row = mysql_fetch_assoc($result);
-                $this->setId($row["id"]);
-                $this->setTitle($row["title"]);
-                $this->setSummary($row["summary"]);
-                $this->setUser($row["user"]);
-                $this->setContent($row["content"]);
-                $this->setDateCreated($row["date_created"]);
-                $this->setSection($row["section"]);
-                $this->setPublished($row["published"]);
-                $status = true;
+        try {
+            if (cb_connect()) {
+                $query = "SELECT * FROM articles WHERE id = " . $id . " LIMIT 0,1";
+                $result = mysql_query($query);
+                if (mysql_num_rows($result) > 0) {
+                    $row = mysql_fetch_assoc($result);
+                    $this->setId($row["id"]);
+                    $this->setTitle($row["title"]);
+                    $this->setSummary($row["summary"]);
+                    $this->setUser($row["user"]);
+                    $this->setContent($row["content"]);
+                    $this->setDateCreated($row["date_created"]);
+                    $this->setSection($row["section"]);
+                    $this->setPublished($row["published"]);
+                    return true;
+                } else {
+                    throw Exception("No such article.");
+                }
+            } else {
+                throw Exception("DB Not Connected in UserGroup.php SELECT");
             }
-        } else {
-            error_log("DB Not Connected in UserGroup.php SELECT");
+        } catch (Exception $e){
+            error_log($e->getMessage());
+            return false;
         }
-        return $status;
     }
 
     function save() {
@@ -142,12 +147,43 @@ class Section {
     // Deletes the object in memory from the database.
 
     function delete() {
-        $status = false;
-        if (cb_connect()) {
-            $result = mysql_query("DELETE FROM articles WHERE id = " . $this->getId());
-            $status = true;
+        try {
+            if (cb_connect()) {
+                $result = mysql_query("DELETE FROM articles WHERE id = " . $this->getId());
+                return true;
+            } else {
+                throw new Exception("Could not connect");
+            }
+        } catch (Exception $e){
+            error_log($e->getMessage());
+            return false;
         }
-        return $status;
+    }
+    
+    function createHTMLEditForm(){
+        $html = "<form action='save.php' method='post'>";
+        $html.= "<label for='section'>Section: </label>";
+        $html.= "<select id='section' name='section'>";
+        $Section =& new Section();
+        $sections = $Section->getSections();
+        if($sections){
+            foreach($sections as $s){
+                $html.= "<option value='" . $s->getId() . "'>" . $s->getName() . "</option>";
+            }
+        } else {
+            throw new Exception("No sections");
+        }
+        $html.= "</select>";
+        $html.= "<label for='title'>Title: </label>";
+        $html.= "<input name='title' id='title' placeholder='Enter a title for the article' value='' />";
+        $html.= "<label for='summary'></label>";
+        $html.- "<textarea id='summary' name='summary' placeholder='Enter a short summary of the article.'></textarea>";
+        $html.= "<label for='content'></label>";
+        $html.= "<textarea id='content' name='content' placeholder='Start your article here.'></textarea>";
+        $html.= "<input type='submit' value='Preview' />";
+        $html.= "<input type='submit' value='Create' />";
+        $html.= "</form>";
+        return $html;
     }
 }
 ?>
