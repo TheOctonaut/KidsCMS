@@ -135,5 +135,40 @@ class Section {
         }
         return $result;
     }
+    
+    function getArticles() {
+        try {
+            if (cb_connect()) {
+                if(is_int($this->getId())){
+                    if($this->getId() >= 0){
+                        $result = mysql_query("SELECT * FROM articles WHERE section = " . $this->getId());
+                        if(mysql_num_rows($result) > 0){
+                            $articles = array();
+                            while($r = mysql_fetch_array($result)){
+                                //assign values to an article object
+                                $art =& new Article();
+                                $art->setId($row['id']);
+                                $art->setTitle($row['title']);
+                                $art->setSummary($row['summary']);
+                                $articles[]=$art;
+                            }
+                            return $articles;
+                        } else {
+                            throw new Exception("No results.");
+                        }
+                    } else {
+                        throw new Exception("Invalid ID");
+                    }
+                } else {
+                    throw new Exception("ID not an integer");
+                }
+            } else {
+                throw new Exception("Database connection failed.");
+            }
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            return false;
+        }
+    }
 }
 ?>

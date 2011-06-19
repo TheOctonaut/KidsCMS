@@ -149,13 +149,5 @@ class Section {
         }
         return $status;
     }
-
-    function listArticlesBySection($s) {
-        $result = false;
-        if (cb_connect()) {
-            $result = mysql_query("SELECT * FROM articles WHERE section = " . $s);
-        }
-        return $result;
-    }
 }
 ?>

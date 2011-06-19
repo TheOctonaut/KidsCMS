@@ -65,22 +65,27 @@ if(isset($_SESSION["id"])){
             }
         }?>
       <?php if ($loggedin){ ?>
-      <p>
-          <?php echo $lang->greeting . " " . $User->getName() . " (" . $User->getEmail() . ") "; ?>
-          <a href="auth.php?act=logout"><?php echo $lang->logout; ?></a>
-      </p>
-      <?php $Section = new Section();
-      $Section->getSectionById(filter_var($_GET["id"], FILTER_SANITIZE_NUMBER_INT));
-      ?>
-      <h2><?php echo $Section->getName(); ?></h2><details><summary><?php echo $Section->getSummary(); ?></summary></details>
-      <h3>Articles in this Section</h3>
-      <?php 
-        
-      ?>
-      <ol>
-          
-      </ol>
-      <?php
+          <p>
+              <?php echo $lang->greeting . " " . $User->getName() . " (" . $User->getEmail() . ") "; ?>
+              <a href="auth.php?act=logout"><?php echo $lang->logout; ?></a>
+          </p>
+          <?php $Section = new Section();
+          $Section->getSectionById(filter_var($_GET["id"], FILTER_SANITIZE_NUMBER_INT));
+          ?>
+          <h2><?php echo $Section->getName(); ?></h2><details><summary><?php echo $Section->getSummary(); ?></summary></details>
+          <h3>Articles in this Section</h3>
+          <?php 
+          $articles = $Section->getArticles();
+          foreach ($articles as $a){
+          ?>
+          <ol>
+              <li>
+                  <h4><?php echo $a->getTitle();?></h4>
+                  <p><?php echo $a->getSummary();?></p>
+              </li>
+          </ol>
+          <?php
+          }
       } else { ?>
             <h3><?php echo $lang->login; ?></h3>
             <section class="login">
