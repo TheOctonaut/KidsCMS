@@ -88,25 +88,22 @@ class Article {
 
     function getArticleById($id) {
         try {
-            if (cb_connect()) {
-                $query = "SELECT * FROM articles WHERE id = " . $id . " LIMIT 0,1";
-                $result = mysql_query($query);
-                if (mysql_num_rows($result) > 0) {
-                    $row = mysql_fetch_assoc($result);
-                    $this->setId($row["id"]);
-                    $this->setTitle($row["title"]);
-                    $this->setSummary($row["summary"]);
-                    $this->setUser($row["user"]);
-                    $this->setContent($row["content"]);
-                    $this->setDateCreated($row["date_created"]);
-                    $this->setSection($row["section"]);
-                    $this->setPublished($row["published"]);
-                    return true;
-                } else {
-                    throw Exception("No such article.");
-                }
+            cb_connect();
+            $query = "SELECT * FROM articles WHERE id = " . $id . " LIMIT 0,1";
+            $result = mysql_query($query);
+            if (mysql_num_rows($result) > 0) {
+                $row = mysql_fetch_assoc($result);
+                $this->setId(intval($row["id"]));
+                $this->setTitle($row["title"]);
+                $this->setSummary($row["summary"]);
+                $this->setUser(intval($row["user"]));
+                $this->setContent($row["content"]);
+                $this->setDateCreated($row["date_created"]);
+                $this->setSection(intval($row["section"]));
+                $this->setPublished(intval($row["published"]));
+                return true;
             } else {
-                throw Exception("DB Not Connected in UserGroup.php SELECT");
+                throw Exception("No such article.");
             }
         } catch (Exception $e){
             error_log($e->getMessage());
@@ -165,8 +162,7 @@ class Article {
     function createHTMLEditForm(){
         try {
             // TODO: load values for existing article
-            $html = "<form action='adminedit.php' method='post'>";
-            $html.= "<label for='section_id'>Section: </label>";
+            $html = "<label for='section_id'>Section: </label>";
             $html.= "<select id='section_id' name='section_id'>";
             $Section =& new Section();
             $sections = $Section->getSections();
@@ -199,9 +195,6 @@ class Article {
             $html.= "<label for='published'>Published?: </label>";
             $html.= "<input type='checkbox' id='published' name='published' />";
             $html.= "<input type='submit' value='Preview' />";
-            $html.= "<input type='submit' value='Create' />";
-            $html.= "</form>";
-            // Create Form
             return $html;
         } catch (Exception $e){
             // TODO: handle error

@@ -140,24 +140,22 @@ class Section {
     
     function getSections() {
         try {
-            if (cb_connect()) {
-                $result = mysql_query("SELECT * FROM sections");
-                if(mysql_num_rows($result) > 0){
-                    $sections = array();
-                    while($s = mysql_fetch_array($result)){
-                        //assign values to an article object
-                        $s = new Section();
-                        $s->setId($row['id']);
-                        $s->setName($row['name']);
-                        $s->setSummary($row['summary']);
-                        $sections[]=$s;
-                    }
-                    return $sections;
-                } else {
-                    throw new Exception("No results.");
+            cb_connect();
+            $result = mysql_query("SELECT * FROM sections");
+            if(mysql_num_rows($result) > 0){
+                $sections = array();
+                while($row = mysql_fetch_array($result)){
+                    //assign values to an article object
+                    $s = new Section();
+                    $s->setId(intval($row['id']));
+                    $s->setName($row['name']);
+                    $s->setSummary($row['summary']);
+                    //error_log(var_dump($s));
+                    $sections[]=$s;
                 }
+                return $sections;
             } else {
-                throw new Exception("Database connection failed.");
+                throw new Exception("No results.");
             }
         } catch (Exception $e) {
             error_log($e->getMessage());
@@ -165,11 +163,10 @@ class Section {
         }
     }
     
-    function makeHTMLEditForm(){
+    function createHTMLEditForm(){
         try {
             // TODO: load values for existing Section
-            $html = "<form action='adminedit.php' method='post'>";
-            $html.= "<label for='name'>Section Name: </label>";
+            $html = "<label for='name'>Section Name: </label>";
             $html.= "<input name='name' id='name' placeholder='Enter a name for the Section' value='' />";
             $html.= "<label for='menu_order'>Menu Order: </label>";
             $html.= "<input type='number' name='menu_order' id='menu_order' placeholder='0' value='' />";
@@ -178,10 +175,7 @@ class Section {
             $html.= "<label for='media'>Media: </label>";
             $html.= "<input type='file' id='media' name='media' />";
             $html.= "<label for='summary'>Summary: </label>";
-            $html.- "<textarea id='summary' name='summary' placeholder='Enter a short summary of the Section.'></textarea>";
-            $html.= "<input type='submit' value='Create' />";
-            $html.= "</form>";
-            // Create Form
+            $html.= "<textarea id='summary' name='summary' placeholder='Enter a short summary of the Section.'></textarea>";
             return $html;
         } catch (Exception $e){
             // TODO: handle error

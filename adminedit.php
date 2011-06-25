@@ -416,6 +416,10 @@ if($loggedin){
                     $Article =& new Article();
                     echo $Article->createHTMLEditForm();
                     break;
+                case "sections":
+                    $Section =& new Section();
+                    echo $Section->createHTMLEditForm();
+                    break;
                 } //end case switch
             ?><input type="submit" value="Save" /></form><?php
         } else {
