@@ -228,6 +228,33 @@ if($loggedin){
                         break;
                 }
                 break;
+            case "articles": 
+                $Article = new Article();
+                switch ($_REQUEST['act']){
+                    case "save":
+                        break;
+                    case "delete";
+                        break;
+                    default:
+                        break;
+                }
+                //edit/save article
+                break;
+            case "sections":
+                $Section= new Section();
+                switch ($_REQUEST['act']){
+                    case "save":
+                        break;
+                    case "delete";
+                        break;
+                    default:
+                        break;
+                }
+                //edit/save section
+                break;
+            default: 
+                // do something sane
+                break;
         } //end type switch
     } // end if user has power
 } // end if logged in

@@ -1,5 +1,7 @@
 <?php
-
+/****
+ * Article
+ */
 $subd = "/kidsacademy";
 include_once($_SERVER['DOCUMENT_ROOT'] . $subd . "/utilities.php");
 
@@ -161,7 +163,7 @@ class Article {
     }
     
     function createHTMLEditForm(){
-        $html = "<form action='save.php' method='post'>";
+        $html = "<form action='adminedit.php' method='post'>";
         $html.= "<label for='section'>Section: </label>";
         $html.= "<select id='section' name='section'>";
         $Section =& new Section();
@@ -183,6 +185,7 @@ class Article {
         $html.= "<input type='submit' value='Preview' />";
         $html.= "<input type='submit' value='Create' />";
         $html.= "</form>";
+        // Create Form
         return $html;
     }
 }

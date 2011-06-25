@@ -1,5 +1,7 @@
 <?php
-
+/***
+ * Section
+ */
 $subd = "/kidsacademy";
 include_once($_SERVER['DOCUMENT_ROOT'] . $subd . "/utilities.php");
 
