@@ -359,9 +359,9 @@ class User {
             cb_connect();
             $query = "SELECT * FROM users";
             $result = mysql_query($query) or die("Error: " . mysql_error());
-            $users &= array();
+            $users = array();
             while ($row = mysql_fetch_array($result)){
-                $loopyUser &= new User();
+                $loopyUser = new User();
                 $loopyUser->setId(intval($row["id"]));
                 $loopyUser->setName($row["name"]);
                 $loopyUser->setEmail($row["email"]);

@@ -170,7 +170,7 @@ class Article {
             $html.= "<select id='section_id' name='section_id'>";
             $Section =& new Section();
             $sections = $Section->getSections();
-            if($sections){
+            if(is_array($sections)){
                 foreach($sections as $s){
                     $html.= "<option value='" . $s->getId() . "'>" . $s->getName() . "</option>";
                 }

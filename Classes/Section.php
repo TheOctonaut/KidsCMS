@@ -146,7 +146,7 @@ class Section {
                     $sections = array();
                     while($s = mysql_fetch_array($result)){
                         //assign values to an article object
-                        $s =& new Section();
+                        $s = new Section();
                         $s->setId($row['id']);
                         $s->setName($row['name']);
                         $s->setSummary($row['summary']);
