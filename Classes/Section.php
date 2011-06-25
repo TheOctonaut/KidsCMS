@@ -165,6 +165,30 @@ class Section {
         }
     }
     
+    function makeHTMLEditForm(){
+        try {
+            // TODO: load values for existing Section
+            $html = "<form action='adminedit.php' method='post'>";
+            $html.= "<label for='name'>Section Name: </label>";
+            $html.= "<input name='name' id='name' placeholder='Enter a name for the Section' value='' />";
+            $html.= "<label for='menu_order'>Menu Order: </label>";
+            $html.= "<input type='number' name='menu_order' id='menu_order' placeholder='0' value='' />";
+            $html.= "<label for='icon'>Icon: </label>";
+            $html.= "<input type='file' id='icon' name='icon' />";
+            $html.= "<label for='media'>Media: </label>";
+            $html.= "<input type='file' id='media' name='media' />";
+            $html.= "<label for='summary'>Summary: </label>";
+            $html.- "<textarea id='summary' name='summary' placeholder='Enter a short summary of the Section.'></textarea>";
+            $html.= "<input type='submit' value='Create' />";
+            $html.= "</form>";
+            // Create Form
+            return $html;
+        } catch (Exception $e){
+            // TODO: handle error
+            return null;
+        }
+    }
+    
     function getArticles() {
         try {
             if (cb_connect()) {

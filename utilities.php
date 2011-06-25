@@ -24,19 +24,14 @@ function check_captcha($challenge, $response){
 
 function cb_connect(){
     //creates a connection to the database using the settings hardcoded into settings.php
-    try {
-        if(mysql_connect(CB_HOST, CB_USERNAME, CB_PASSWORD)){
-            if (mysql_select_db(CB_NAME)) {
-                return true;
-            } else {
-                throw new Exception("Could not select database.");
-            }
+    if(mysql_connect(CB_HOST, CB_USERNAME, CB_PASSWORD)){
+        if (mysql_select_db(CB_NAME)) {
+            return true;
         } else {
-            throw new Exception("Could not connect to database.");
+            throw new Exception("Could not select database.");
         }
-    } catch (Exception $e){
-        error_log($e->getMessage());
-        return false;
+    } else {
+        throw new Exception("Could not connect to database.");
     }
 }
 

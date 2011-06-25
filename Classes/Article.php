@@ -163,30 +163,50 @@ class Article {
     }
     
     function createHTMLEditForm(){
-        $html = "<form action='adminedit.php' method='post'>";
-        $html.= "<label for='section_id'>Section: </label>";
-        $html.= "<select id='section_id' name='section_id'>";
-        $Section =& new Section();
-        $sections = $Section->getSections();
-        if($sections){
-            foreach($sections as $s){
-                $html.= "<option value='" . $s->getId() . "'>" . $s->getName() . "</option>";
+        try {
+            // TODO: load values for existing article
+            $html = "<form action='adminedit.php' method='post'>";
+            $html.= "<label for='section_id'>Section: </label>";
+            $html.= "<select id='section_id' name='section_id'>";
+            $Section =& new Section();
+            $sections = $Section->getSections();
+            if($sections){
+                foreach($sections as $s){
+                    $html.= "<option value='" . $s->getId() . "'>" . $s->getName() . "</option>";
+                }
+            } else {
+                throw new Exception("No sections");
             }
-        } else {
-            throw new Exception("No sections");
+            $html.= "</select>";
+            $html.= "<label for='author'>Author: </label>";
+            $html.= "<select id='author' name='author'>";
+            $User =& new User();
+            $users = $User->getUsers();
+            if(is_array($users)){
+                foreach($users as $u){
+                    $html.= "<option value='" . $u->getId() . "'>" . $u->getDisplayName() . "</option>";
+                }
+            } else {
+                throw new Exception("No users");
+            }
+            $html.= "</select>";
+            $html.= "<label for='title'>Title: </label>";
+            $html.= "<input name='title' id='title' placeholder='Enter a title for the article' value='' />";
+            $html.= "<label for='summary'></label>";
+            $html.- "<textarea id='summary' name='summary' placeholder='Enter a short summary of the article.'></textarea>";
+            $html.= "<label for='content'></label>";
+            $html.= "<textarea id='content' name='content' placeholder='Start your article here.'></textarea>";
+            $html.= "<label for='published'>Published?: </label>";
+            $html.= "<input type='checkbox' id='published' name='published' />";
+            $html.= "<input type='submit' value='Preview' />";
+            $html.= "<input type='submit' value='Create' />";
+            $html.= "</form>";
+            // Create Form
+            return $html;
+        } catch (Exception $e){
+            // TODO: handle error
+            return null;
         }
-        $html.= "</select>";
-        $html.= "<label for='title'>Title: </label>";
-        $html.= "<input name='title' id='title' placeholder='Enter a title for the article' value='' />";
-        $html.= "<label for='summary'></label>";
-        $html.- "<textarea id='summary' name='summary' placeholder='Enter a short summary of the article.'></textarea>";
-        $html.= "<label for='content'></label>";
-        $html.= "<textarea id='content' name='content' placeholder='Start your article here.'></textarea>";
-        $html.= "<input type='submit' value='Preview' />";
-        $html.= "<input type='submit' value='Create' />";
-        $html.= "</form>";
-        // Create Form
-        return $html;
     }
 }
 ?>

@@ -323,26 +323,60 @@ class User {
 		return $return;
 	}
 
-	function is_valid_password($ep){
-		$return = false;
-		$passrules = "/(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{5,12})$/";
-		if(preg_match($passrules, $ep) > 0){
-			$return = true;
-		}
-		return $return;
-	}
+    function is_valid_password($ep){
+        try {
+            $passrules = "/(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{5,12})$/";
+            if(preg_match($passrules, $ep) > 0){
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception $e){
+            // TODO: handle exception
+            return false;
+        }
+    }
         function activate($key){
-            $status = false;
             if(strlen($key) > 5){
                 if(cb_connect()){
                     $query = "UPDATE users SET user_group = 1 WHERE id = (SELECT user FROM activations WHERE akey = '" . $key . "')";
                     $result = mysql_query($query);
                     if(mysql_affected_rows() > 0){
-                        $status=true;
+                        return true;
+                    } else {
+                        return false;
                     }
+                } else {
+                    return false;
                 }
+            } else {
+                return false;
             }
-            return $status;
         }
+        
+    function getUsers(){
+        try {
+            cb_connect();
+            $query = "SELECT * FROM users";
+            $result = mysql_query($query) or die("Error: " . mysql_error());
+            $users &= array();
+            while ($row = mysql_fetch_array($result)){
+                $loopyUser &= new User();
+                $loopyUser->setId(intval($row["id"]));
+                $loopyUser->setName($row["name"]);
+                $loopyUser->setEmail($row["email"]);
+                $loopyUser->setDisplayName($row["displayname"]);
+                $loopyUser->setLastIP($row["lastip"]);
+                $loopyUser->setUserGroup($row["user_group"]);
+                $loopyUser->setProfile(intval($row["profile"]));
+                $loopyUser->setContactNumber($row["contactnumber"]);
+                $users[]=$loopyUser;
+            }
+            return $users;
+        } catch (Exception $e){
+            // TODO: handle exception
+            return false;
+        }
+    }
 }
 ?>
