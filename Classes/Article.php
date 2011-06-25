@@ -164,8 +164,8 @@ class Article {
     
     function createHTMLEditForm(){
         $html = "<form action='adminedit.php' method='post'>";
-        $html.= "<label for='section'>Section: </label>";
-        $html.= "<select id='section' name='section'>";
+        $html.= "<label for='section_id'>Section: </label>";
+        $html.= "<select id='section_id' name='section_id'>";
         $Section =& new Section();
         $sections = $Section->getSections();
         if($sections){

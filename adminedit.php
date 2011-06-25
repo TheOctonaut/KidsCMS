@@ -232,6 +232,60 @@ if($loggedin){
                 $Article = new Article();
                 switch ($_REQUEST['act']){
                     case "save":
+                        if(isset($_REQUEST["section_id"])){
+                            if($Article->setSection(intval())){
+                                //success
+                            } else {
+                                // add error to list of messages
+                            }
+                        } else {
+                            // feedback
+                        }
+                        if(isset($_REQUEST["title"])){
+                            if($Article->setTitle($_REQUEST["title"])){
+                                //success
+                            } else {
+                                // error
+                            }
+                        } else {
+                            // error
+                        }
+                        if(isset($_REQUEST["summary"])){
+                            if($Article->setSummary($_REQUEST["summary"])){
+                                // success
+                            } else {
+                                // error
+                            }
+                        } else {
+                            // error
+                        }
+                        if(isset($_REQUEST["content"])){
+                            if($Article->setContent($_REQUEST["content"])){
+                                // success
+                            } else {
+                                // error
+                            }
+                        } else {
+                            // error
+                        }
+                        if(isset($_REQUEST["author"])){
+                            if($Article->setUser(intval($_REQUEST["author"]))){
+                                // success
+                            } else {
+                                // error
+                            }
+                        } else {
+                            // error
+                        }
+                        if(isset($_REQUEST["published"])){
+                            if($Article->setPublished($_REQUEST["published"])){
+                                // success
+                            } else {
+                                // error
+                            }
+                        } else {
+                            // error
+                        }
                         break;
                     case "delete";
                         break;
