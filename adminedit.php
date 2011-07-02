@@ -13,146 +13,109 @@ if(isset($_SESSION["id"])){
     }
 }
 require_once("includes/lang.php");
+
 if($loggedin){
     // Check that the user has at least a power of 3.
     // In future this value might not be hard coded.
     if($User->getPower() >= 3){
-        // what type of objects are we working with here?
-        switch ($_REQUEST["type"]){
-            case "users":
-                // make us a user who's going to have the act done to them
-                $EditUser = new User();
-                switch($_REQUEST["act"]){
-                    case "save":
+        switch($_REQUEST["act"]){
+            case "save":
+                $msgarray = array();
+                $valid = true;
+                // what type of objects are we working with here?
+                switch ($_REQUEST["type"]){
+                    case "users":
+                        // make us a user who's going to have the act done to them
+                        $EditUser = new User();
                         // check that all our values are set and sanitised.
-                        $name = isset($_POST["name"]) ? filter_var($_POST["name"], FILTER_SANITIZE_STRING) : false;
-                        $dname = isset($_POST["display_name"]) ? filter_var($_POST["display_name"], FILTER_SANITIZE_STRING) : false;
-                        // we have to do some special stuff for id,
-                        // as it isn't always an integer. This is simpler to
-                        // maintain than having separate functions 
-                        // for new/updated users!
-                        $uid = "";
+                        if(isset($_POST["name"])){
+                            if(!$EditUser->setName($_POST["name"])){
+                                array_push($msgarray, "invalid_name");
+                                $valid = false;
+                            }
+                        } else {
+                            array_push($msgarray, "invalid_name_not_set");
+                            $valid = false;
+                        }
+                        if(isset($_POST["display_name"])){
+                            if(!$EditUser->setDisplayName($_POST["display_name"])){
+                                array_push($msgarray, "invalid_display_name");
+                                $valid = false;
+                            }
+                        } else {
+                            array_push($msgarray, "invalid_display_name_not_set");
+                            $valid = false;
+                        }
                         if(isset($_POST["id"])){
                             if($_POST["id"] == "new"){
-                                $uid = "new";
+                                if(!$EditUser->setId("new")){
+                                    array_push($msgarray, "invalid_user_id");
+                                    $valid = false;
+                                }
                             } elseif(is_numeric($_POST["id"])){
-                                $uid = filter_var($_POST["id"], FILTER_SANITIZE_NUMBER_INT);
+                                if(!$EditUser->setId(intval($_POST["id"]))){
+                                    array_push($msgarray, "invalid_user_id");
+                                    $valid = false;
+                                }
                             } else {
-                                $uid = -1;
+                                array_push($msgarray, "invalid_user_id");
+                                $valid = false;
                             }
                         } else {
-                            $uid = -1;
+                            array_push($msgarray, "invalid_user_id_not_set");
+                            $valid = false;
                         }
-                        $cnum = isset($_POST["contact_number"]) ? filter_var($_POST["contact_number"], FILTER_SANITIZE_NUMBER_INT) : false;
-                        $ugp = isset($_POST["user_group"]) ? filter_var($_POST["user_group"], FILTER_SANITIZE_NUMBER_INT) : false;
-                        $eml = isset($_POST["email"]) ? filter_var($_REQUEST["email"], FILTER_SANITIZE_EMAIL) : false;
-                        // if all of the above passed...
-                        if($name && $dname && $cnum && $ugp >= 0 && $eml){
-                            $invalid = array();
-                            $status = true;
-                            if(($uid >= 0 && $uid <= 99999) || $uid == "new") { $EditUser->setId($uid); } else { array_push($invalid, "invalid_user_id"); $status = false; }
-                            if(strlen(filter_var($name, FILTER_SANITIZE_STRING)) > 2){ $EditUser->setName($name); } else { array_push($invalid, "invalid_user_name"); $status = false; }
-                            if(strlen(filter_var($dname, FILTER_SANITIZE_STRING)) > 2){ $EditUser->setDisplayName($dname); } else { array_push($invalid, "invalid_user_display_name"); $status = false; }
-                            if(filter_var($eml, FILTER_VALIDATE_EMAIL)){ $EditUser->setEmail($eml); } else { array_push($invalid, "invalid_user_email"); $status = false; }
-                            if($cnum >= 9999 && $cnum < 999999999999) { $EditUser->setContactNumber($cnum); } else { array_push($invalid, "invalid_user_contact_number"); $status = false; }
-                            if($ugp >= 0 && $ugp <= 9) { $EditUser->setUserGroup($ugp); } else { array_push($invalid, "invalid_user_group"); $status = false; }
-                            $sendemail = false;
-                            if($uid == "new"){
-                                $sendemail = true;
-                                // we'll use the salt generator to
-                                //  create a random password.
-                                $temppass = generateSalt(7) . rand(0, 9);
-                                if($EditUser->is_valid_password($temppass)){
-                                    //if they've matched, we generate some salt
-                                    $EditUser->setSalt(generateSalt(5));
-                                    //sprinkle the salt on the end of the password
-                                    //cook the whole thing with MD5
-                                    //and set it as our password to be stored
-                                    $EditUser->setPassword(md5($temppass . $EditUser->getSalt()));
-                                } else {
-                                    //not a valid password
-                                    $status = false;
-                                    // TODO: lang.xml generated_invalid_password
-                                    array_push($msgs, "generated_invalid_password");
+                        if(isset($_POST["contact_number"])){
+                            if(is_numeric($_POST["contact_number"])){
+                                if(!$EditUser->setContactNumber(intval($_POST["contact_number"]))){
+                                    array_push($msgarray, "invalid_contact_number");
+                                    $valid = false;
                                 }
+                            } else {
+                                array_push($msgarray, "invalid_contact_number");
+                                $valid = false;
                             }
-                            // if none of the above checks have set our status to false
-                            if($status){
-                                // try to save the user
-                                if($EditUser->save()){
-                                    if($sendemail){
-                                        // email the user their new password
-                                        $URL = "http://www.mononyk.us/kidsacademy/";
-                                        $subject = "Account Created at Kids\' Academy";
-                                        $message = '<h1>Hello ' . $EditUser->getName() . "!</h1><p>You have had an account created for you at <strong><a href='" . $URL . "' />Kids' Academy</a></strong>.";
-                                        $message .= "Your temporary password is: <strong>" . $temppass. "</strong>. You can use it to log into the site with your new account, but please don't forget to change it to something you will remember.</p>";
-                                        $message .= "<p>See you soon!</p><h3>The Kids' Academy family</h3>";
-                                        $headers  = 'MIME-Version: 1.0' . "\r\n";
-                                        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-                                        $headers .= 'From: newaccounts@kidsacademy.ac.th' . "\r\n" .
-                                                        'Reply-To: info@campusbike.ucc.ie' . "\r\n" .
-                                                        'X-Mailer: PHP/' . phpversion();
+                        } else {
+                           array_push($msgarray, "invalid_contact_number_not_set");
+                           $valid = false;
+                        }
+                        if(isset($_POST["user_group"])){
+                            if(is_numeric($_POST["user_group"])){
+                                if(!$EditUser->setUserGroup(intval($_POST["user_group"]))){
+                                    array_push($msgarray, "invalid_user_group");
+                                    $valid = false;
+                                }
+                            } else {
+                                array_push($msgarray, "invalid_user_group");
+                                $valid = false;
+                            }
+                        } else {
+                           array_push($msgarray, "invalid_user_group_not_set");
+                           $valid = false;
+                        }
+                        if(isset($_POST["email"])){
+                            if(!$EditUser->setEmail(filter_var($_POST["email"], FILTER_SANITIZE_EMAIL))){
+                                array_push($msgarray, "invalid_email");
+                                $valid = false;
+                            }
+                        } else {
+                            array_push($msgarray, "invalid_email_not_set");
+                            $valid = false;
+                        }
+                        if($valid){
+                            if($EditUser->save()){
+                                array_push($msgarray, "saved_user");
+                                moveOn("adminedit.php?", $msgarray);
+                            } else {
+                                // TODO: show saving user error
+                            }
+                        } else {
+                            // TODO: return to editing page and show $msgarray
+                        }
+                        break;
+                    case "groups":
+                        $EditUserGroup = new UserGroup();
 
-                                        if(mail($EditUser->getEmail(), $subject, $message, $headers)){
-
-                                        } else {
-                                                error_log("TEMPPASS MAIL NOT SENT");
-                                        }
-                                    }
-                                    moveOn("adminview.php", "?type=users&msg=saved_user");
-                                } else {
-                                    moveOn("adminedit.php", "?type=users&id=" . $_POST["id"] . "&msg=saved_user_error");
-                                }
-                            } else {
-                                //otherwise, return error messages to the edit page.
-                                $extra = "?type=users&id=" . $_POST["id"];
-                                foreach ($invalid as $inv){
-                                    $extra .= "&msg[]=" . $inv;
-                                }
-                                moveOn("adminedit.php", $extra);
-                            }
-                        } else {
-                            //otherwise, return error messages to the edit page.
-                                $extra = "?type=users&id=" . $_POST["id"];
-                                $extra .= "&msg=must_complete_form";
-                                moveOn("adminedit.php", $extra);
-                        }
-                        break;
-                    case "delete":
-                        $uid = "";
-                        $status = false;
-                        if(isset($_REQUEST["id"])){
-                            if(is_numeric($_REQUEST["id"])){
-                                $uid = filter_var($_REQUEST["id"], FILTER_SANITIZE_NUMBER_INT);
-                            } else {
-                                $uid = -1;
-                            }
-                        } else {
-                            $uid = -1;
-                        }
-                        if($uid >= 0 && $uid <= 99999) { 
-                            $EditUser->setId($uid);
-                            if($EditUser->delete()){
-                                $status = true;
-                            }
-                        }
-                        if($status){
-                            $extra = "?type=users&msg=deleted_user";
-                            moveOn("adminview.php", $extra);
-                        } else {
-                            $extra = "?type=users&msg=deleted_user_error";
-                            moveOn("adminview.php", $extra);
-                        }
-                        break;
-                    default:
-                        // No action needed. Allow the the edit input screen.
-                        break;
-                } //end act switch
-                break;
-            case "groups":
-                $EditUserGroup = new UserGroup();
-                switch ($_REQUEST["act"]){
-                    case "save":
                         $gid = "";
                         if(isset($_POST["id"])){
                             if($_POST["id"] == "new"){
@@ -183,41 +146,8 @@ if($loggedin){
                             moveOn("adminedit.php", $extra);
                         }
                         break;
-                    case "delete":
-                        $gid = "";
-                        $status = false;
-                        if(isset($_POST["id"])){
-                            if(is_numeric($_POST["id"])){
-                                $gid = filter_var($_POST["id"], FILTER_SANITIZE_NUMBER_INT);
-                            } else {
-                                $gid = -1;
-                            }
-                        } else {
-                            $gid = -1;
-                        }
-                        if($gid >= 0 && $uid <= 99999) { 
-                            $EditUserGroup->setId($uid);
-                            if($EditUserGroup->delete()){
-                                $status = true;
-                            }
-                        }
-                        if($status){
-                            $extra = "?type=groups&msg=deleted_user_group";
-                            moveOn("adminview.php", $extra);
-                        } else {
-                            $extra = "?type=groups&msg=deleted_user_group_error";
-                            moveOn("adminview.php", $extra);
-                        }
-                        break;
-                    default;
-                        // No action needed. Allow the the edit input screen.
-                        break;
-                }
-                break;
-            case "articles": 
-                $Article = new Article();
-                switch ($_REQUEST['act']){
-                    case "save":
+                    case "articles": 
+                        $Article = new Article();
                         if(isset($_REQUEST["section_id"])){
                             if($Article->setSection(intval())){
                                 //success
@@ -273,29 +203,44 @@ if($loggedin){
                             // error
                         }
                         break;
-                    case "delete";
+                    case "sections":
+                        $Section= new Section();
                         break;
                     default:
-                        break;
+                        // TODO: something sane if no real type set
                 }
-                //edit/save article
+                $destination = ($valid) ? "adminview" : "adminedit";
+                moveOn($destination, array("type"=>$_REQUEST["type"],"msg"=>$msgarray,"id" => $id));
                 break;
-            case "sections":
-                $Section= new Section();
-                switch ($_REQUEST['act']){
-                    case "save":
+            case "delete":
+                $msgarray = array();
+                $valid = true;
+                switch($_REQUEST["type"]){
+                    case "users":
+                        if(isset($_REQUEST["id"])){
+                            if(is_numeric($_REQUEST["id"])){
+                                if($EditUser->setId(intval($_REQUEST["id"]))){
+                                    if($EditUser->delete()){
+                                        // success
+                                    }
+                                }
+                            }
+                        }
                         break;
-                    case "delete";
+                    case "groups":
+                        break;
+                    case "articles":
+                        break;
+                    case "sections":
                         break;
                     default:
+                        // TODO: something sane if no real type set
                         break;
                 }
-                //edit/save section
                 break;
-            default: 
-                // do something sane
-                break;
-        } //end type switch
+            default:
+                // TODO: something sane if no real act set
+        } //end act switch
     } // end if user has power
 } // end if logged in
 ?><!DOCTYPE html>
@@ -303,21 +248,13 @@ if($loggedin){
   <head>
     <title>Kids' Academy - <?php echo $lang->title_admin_edit; ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen">
-    <link rel="stylesheet" href="css/default.css" type="text/css" media="screen">
-    <link rel="stylesheet" href="css/html5.css" type="text/css" media="screen">
-    <script type="text/javascript" src="js/prototype.js"></script>
-    <script type="text/javascript" src="js/scriptaculous.js"></script>
-    <script type="text/javascript" src="js/validation.js"></script>
-    <!--[if IE]>
-    	<script src="js/html5.js"></script>
-    <![endif]-->
+    <?php include_once("template/css.php"); ?>
+    <?php include_once("template/js.php"); ?>
   </head>
   <body id="index" class="home">
       <?php
       //include the header template
       include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/header.php");
-
       if ($loggedin){
           if($User->getPower() >= 3){
               //include the admin navigation template

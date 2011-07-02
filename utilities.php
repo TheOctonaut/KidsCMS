@@ -78,10 +78,35 @@ function generateSalt($length=5){
     }
 }
 
+function cr_post($a,$b="",$c=0){
+    $r = array();
+    if (!is_array($a)){
+        return false;
+    }
+    foreach ((array)$a as $k=>$v){
+        if ($c){
+            $k=$b."[]";
+        } elseif (is_int($k)){
+            $k=$b.$k;
+        }
+        if (is_array($v)||is_object($v)) {
+            $r[]=cr_post($v,$k,1);
+            continue;
+        }
+        $r[]=urlencode($k)."=".urlencode($v);
+    }
+    return implode("&",$r);
+}
+
 function moveOn($page, $extra = ""){
     $host  = $_SERVER['HTTP_HOST'];
     $uri   = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-    header("Location: http://$host$uri/$page$extra");
+    $qs = "";
+    //$qs = (is_array($extra)) ? "?" . http_build_query($extra) : "?" . $extra ;
+    if($extra != ""){
+        $qs = (is_array($extra)) ? "?" . cr_post($extra) : "?" . $extra ;
+    }
+    header("Location: http://" . $host . $uri . "/" . $page. ".php" . $qs);
     exit;
 }
 

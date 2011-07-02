@@ -19,7 +19,6 @@ class User {
 	private $salt;
 	private $usergroup;
         private $contactnumber;
-	private $profile;
 	private $power;
         private $lastip;
 
@@ -32,29 +31,54 @@ class User {
 	}
         
 	function setName( $val ) {
+            $val = filter_var($val, FILTER_SANITIZE_STRING);
+            if(strlen($val) > 2){
 		$this->name = $val;
-		return;
+		return true;
+            } else {
+                return false;
+            }
 	}
 	function getName() {
 		return $this->name;
 	}
         function setDisplayName( $val ) {
+            $val = filter_var($val, FILTER_SANITIZE_STRING);
+            if(strlen($val) > 2){
 		$this->displayname = $val;
-		return;
+		return true;
+            } else {
+                return false;
+            }
 	}
 	function getDisplayName() {
 		return $this->displayname;
 	}
 	function setId( $val ) {
-		$this->id = $val;
-		return;
-	}
+            if(is_int($val)){
+                if($val >= 0 && $val <= 99999){
+                    $this->id = $val;
+                    return true;
+                } else {
+                    return false;
+                }
+            } elseif ($val=="new"){
+                $this->id = "new";
+                return true;
+            } else {
+                return false;
+            }
+        }
 	function getId() {
 		return $this->id;
 	}
 	function setEmail( $val ) {
+            if(filter_var($val, FILTER_VALIDATE_EMAIL)){
 		$this->email = $val;
-		return;
+		return true;
+            } else {
+                return false;
+            }
 	}
 	function getEmail() {
 		return $this->email;
@@ -74,74 +98,83 @@ class User {
 		return $this->salt;
 	}
 	function setUserGroup( $val ) {
-		$this->usergroup = $val;
-		return;
+            if(is_int($val)){
+                if($val >= 0 && $val <= 9){
+                    $this->usergroup = $val;
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
 	}
 	function getUserGroup() {
 		return $this->usergroup;
 	}
         function setContactNumber( $val ) {
-		$this->contactnumber = $val;
-		return;
+            if(is_int($val)){
+                if($val >= 9999 && $val < 999999999999){
+                    $this->contactnumber = $val;
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
 	}
 	function getContactNumber() {
 		return $this->contactnumber;
 	}
-	function setProfile( $val ) {
-		$this->profile = $val;
-		return;
-	}
-	function getProfile() {
-		return $this->profile;
-	}
 
-	function save(){
-		$status = false;
-		if($this->getId() == "new" && is_numeric($this->getUserGroup()) && $this->getUserGroup() >= 0){
-                        $key = "";
-                        if(cb_connect()){
-                            $query = "INSERT INTO users (name, displayname, email, contact_number, pass, salt, user_group) ";
-                            $query .= "VALUES ('". $this->getName() . "', '". $this->getDisplayName() . "', '" . $this->getEmail() . "', ";
-                            $query .= $this->getContactNumber() . ", '" . $this->getPassword() . "', '" . $this->getSalt() . "', 0);";
-                            $result = mysql_query($query) or die(mysql_error() . "\nQuery was:" .$query);
-                            $this->setId(mysql_insert_id());
-                            $key = generateSalt(8);
-                            $actquery = "INSERT INTO activations (user, akey, expiry) VALUES (" . $this->getId() . ", '" . $key . "', DATE_ADD(NOW(), INTERVAL 3 DAY))";
-                            $actresult = mysql_query($actquery) or die(mysql_error() . "\nQuery was:" .$actquery);
-                            $status = true;
+	function save($temppass = false){
+            try {
+                cb_connect();
+                if($this->getId() == "new"){
+                    if($temppass){
+                        $temppass= generateSalt(7) . rand(0, 9);
+                        if($this->is_valid_password($temppass)){
+                            //if they've matched, we generate some salt
+                            $this>setSalt(generateSalt(5));
+                            //sprinkle the salt on the end of the password
+                            //cook the whole thing with MD5
+                            //and set it as our password to be stored
+                            $this->setPassword(md5($temppass . $this->getSalt()));
                         }
-                        if($status == true){
-                            //create a new user
-                            $URL = "http://www.mononyk.us/kidsacademy/";
-                            $subject = "Account Created at Kids\' Academy";
-                            $message = '<h1>Hello ' . $this->getName() . "!</h1><p>You have had an account created for you at <strong><a href='" . $URL . "' />Kids' Academy</a></strong>.";
-                            $message .= "You <em>need</em> to activate your account. Click the following link to activcate:</p>";
-                            $message .= "<ul><li><a href='" . $URL . "auth.php?act=activate&key=". $key ."'>Key: " . $key . "</a></li></ul>";
-                            $message .= "<p>See you soon!</p><h3>The Kids' Academy family</h3>";
-                            $headers  = 'MIME-Version: 1.0' . "\r\n";
-                            $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-                            $headers .= 'From: newaccounts@kidsacademy.ac.th' . "\r\n" .
-                                            'Reply-To: info@campusbike.ucc.ie' . "\r\n" .
-                                            'X-Mailer: PHP/' . phpversion();
-
-                            if(mail($this->getEmail(), $subject, $message, $headers)){
-
-                            } else {
-                                    error_log("MAIL NOT SENT");
-                            }
-                        } else {
-                            error_log("USER NOT CREATED");
-                        }
-		} elseif (is_numeric($this->getId()) && is_numeric($this->getUserGroup()) && $this->getUserGroup() >= 0 && $this->getId() >= 0){
-                    //update existing user
-                    if(cb_connect()){
-                        $query = "UPDATE users SET user_group = " . $this->getUserGroup() . ", displayname = '" . $this->getDisplayName() . "', email = '";
-                        $query .= $this->getEmail() . "', contact_number = " . $this->getContactNumber() . " WHERE id = " . $this->getId();
-                        $result = mysql_query($query) or die(mysql_error());
-                        $status = true;
                     }
-		}
-		return $status;
+                    $query = "INSERT INTO users (name, displayname, email, contact_number, pass, salt, user_group) ";
+                    $query .= "VALUES ('". $this->getName() . "', '". $this->getDisplayName() . "', '" . $this->getEmail() . "', ";
+                    $query .= $this->getContactNumber() . ", '" . $this->getPassword() . "', '" . $this->getSalt() . "', 0);";
+                    $result = mysql_query($query);
+                    $this->setId(mysql_insert_id());
+                    if($temppass){
+                        if(!$this->send_temppass_email($temppass)){
+                            // TODO: handle failure to send temppass email
+                        }
+                    }                            
+                    $key = generateSalt(8);
+                    $actquery = "INSERT INTO activations (user, akey, expiry) VALUES (" . $this->getId() . ", '" . $key . "', DATE_ADD(NOW(), INTERVAL 3 DAY))";
+                    $actresult = mysql_query($actquery);
+                    if($this->send_activation_email($key)){
+                        return true;
+                    } else {
+                        // TODO: handle failure to send activation email
+                    }
+                } elseif (is_int($this->getId())){
+                    $query = "UPDATE users SET user_group = " . $this->getUserGroup() . ", displayname = '" . $this->getDisplayName() . "', email = '";
+                    $query .= $this->getEmail() . "', contact_number = " . $this->getContactNumber() . " WHERE id = " . $this->getId();
+                    $result = mysql_query($query);
+                    if(mysql_affected_rows() == 1){
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            } catch (Exception $e){
+                error_log($e);
+                return false;
+            }
 	}
 
 	function getUserById($uid){
@@ -229,46 +262,46 @@ class User {
 		return $result;
 	}
 
-	function listEmails(){
-		$result= false;
-		if(cb_connect()){
-			$query = "SELECT email FROM users";
-			$result = mysql_query($query) or die("Error: " . mysql_error());
-		}
-		return $result;
-	}
+    function listEmails(){
+        $result= false;
+        if(cb_connect()){
+            $query = "SELECT email FROM users";
+            $result = mysql_query($query) or die("Error: " . mysql_error());
+        }
+        return $result;
+    }
 
-	function listEmailsByUserGroupId($gid){
-		$result= false;
-		$query = "SELECT email FROM users";
-		if(cb_connect()){
-			if(is_array($gid)){
-				$query .= " WHERE user_group IN (";
-				for ($i = 0; $i < count($gid); $i++){
-					if($i == 0){
-						$query .= $gid[$i];
-					} else {
-						$query .= ", " . $gid[$i];
-					}
-				}
-				$query .= ")";
-			} else {
-				$query = " WHERE user_group = " . $gid;
-			}
+    function listEmailsByUserGroupId($gid){
+        $result= false;
+        $query = "SELECT email FROM users";
+        if(cb_connect()){
+                if(is_array($gid)){
+                        $query .= " WHERE user_group IN (";
+                        for ($i = 0; $i < count($gid); $i++){
+                                if($i == 0){
+                                        $query .= $gid[$i];
+                                } else {
+                                        $query .= ", " . $gid[$i];
+                                }
+                        }
+                        $query .= ")";
+                } else {
+                        $query = " WHERE user_group = " . $gid;
+                }
 
-			$result = mysql_query($query) or die($query . "<br />Error: " . mysql_error());
-		}
-		return $result;
-	}
+                $result = mysql_query($query) or die($query . "<br />Error: " . mysql_error());
+        }
+        return $result;
+    }
 
 	function listUsersNicely(){
-		$result = false;
-		if(cb_connect()){
-			$query = "SELECT users.id, users.name AS user_name, users.displayname AS user_displayname, users.email, user_groups.name AS group_name, users.contact_number, users.last_logged_in ";
-			$query .= "FROM users INNER JOIN user_groups ON users.user_group=user_groups.id";
-			$result = mysql_query($query);
-		}
-		return $result;
+            $result = false;
+            if(cb_connect()){
+                $query = "SELECT users.id, users.name AS user_name, users.displayname AS user_displayname, users.email, user_groups.name AS group_name, users.contact_number, users.last_logged_in ";
+                $query .= "FROM users INNER JOIN user_groups ON users.user_group=user_groups.id";
+                $result = mysql_query($query);
+            }
+            return $result;
 	}
 
 	function is_valid_name($val){
@@ -288,40 +321,34 @@ class User {
 	}
 
 	function is_valid_email($email) {
-		$result = false;
-		if(eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", $email)) {
-   		$result = true;
-  		}
-		return $result;
+            return eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", $email);
 	}
 
-        function is_valid_contact_number($num) {
-            $result = false;
-            if(is_numeric($num)){
-                $result = true;
+    function is_valid_contact_number($num) {
+        if(is_numeric($num)){ 
+            return true;
+        } else { 
+            return false;
+        }
+    }
+
+    function is_unique_email($email){
+        //checks if a supplied email address is not already in the database;
+        // if it is, returns a list of users with that address, in the hope that
+        // just one comes back, and it's the requesting user.
+        if(cb_connect()){
+            $query = "SELECT id FROM users WHERE email = '" . $email . "'";
+            $result = mysql_query($query);
+            $num = mysql_num_rows($result);
+            if($num == 0){
+                return true;
+            } else {
+                return false;
             }
-            return $result;
-	}
-
-	function is_unique_email($email){
-		//checks if a supplied email address is not already in the database;
-		// if it is, returns a list of users with that address, in the hope that
-		// just one comes back, and it's the requesting user.
-		$return = false;
-		if(cb_connect()){
-			$query = "SELECT id FROM users WHERE email = '" . $email . "'";
-			$result = mysql_query($query);
-			$num = mysql_num_rows($result);
-			if($num == 0){
-				$return = true;
-			} else {
-				$return = false;
-			}
-		} else {
-                    $return = false;
-                }
-		return $return;
-	}
+        } else {
+            return false;
+        }
+    }
 
     function is_valid_password($ep){
         try {
@@ -336,23 +363,24 @@ class User {
             return false;
         }
     }
-        function activate($key){
-            if(strlen($key) > 5){
-                if(cb_connect()){
-                    $query = "UPDATE users SET user_group = 1 WHERE id = (SELECT user FROM activations WHERE akey = '" . $key . "')";
-                    $result = mysql_query($query);
-                    if(mysql_affected_rows() > 0){
-                        return true;
-                    } else {
-                        return false;
-                    }
+    
+    function activate($key){
+        if(strlen($key) > 5){
+            if(cb_connect()){
+                $query = "UPDATE users SET user_group = 1 WHERE id = (SELECT user FROM activations WHERE akey = '" . $key . "')";
+                $result = mysql_query($query);
+                if(mysql_affected_rows() > 0){
+                    return true;
                 } else {
                     return false;
                 }
             } else {
                 return false;
             }
+        } else {
+            return false;
         }
+    }
         
     function getUsers(){
         try {
@@ -368,13 +396,51 @@ class User {
                 $loopyUser->setDisplayName($row["displayname"]);
                 $loopyUser->setLastIP($row["lastip"]);
                 $loopyUser->setUserGroup($row["user_group"]);
-                $loopyUser->setProfile(intval($row["profile"]));
                 $loopyUser->setContactNumber($row["contactnumber"]);
                 $users[]=$loopyUser;
             }
             return $users;
         } catch (Exception $e){
             // TODO: handle exception
+            return false;
+        }
+    }
+    
+    function send_activation_email($key){
+        $URL = "http://www.mononyk.us/kidsacademy/";
+        $subject = "Account Created at Kids\' Academy";
+        $message = '<h1>Hello ' . $this->getName() . "!</h1><p>You have had an account created for you at <strong><a href='" . $URL . "' />Kids' Academy</a></strong>.";
+        $message .= "You <em>need</em> to activate your account. Click the following link to activcate:</p>";
+        $message .= "<ul><li><a href='" . $URL . "auth.php?act=activate&key=". $key ."'>Key: " . $key . "</a></li></ul>";
+        $message .= "<p>See you soon!</p><h3>The Kids' Academy family</h3>";
+        $headers  = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= 'From: newaccounts@kidsacademy.ac.th' . "\r\n" .
+                        'Reply-To: info@campusbike.ucc.ie' . "\r\n" .
+                        'X-Mailer: PHP/' . phpversion();
+
+        if(mail($this->getEmail(), $subject, $message, $headers)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    function send_temppass_email($temppass){
+        $URL = "http://www.mononyk.us/kidsacademy/";
+        $subject = "Account Created at Kids\' Academy";
+        $message = '<h1>Hello ' . $this->getName() . "!</h1><p>You have had an account created for you at <strong><a href='" . $URL . "' />Kids' Academy</a></strong>.";
+        $message .= "Your temporary password is: <strong>" . $temppass. "</strong>. You can use it to log into the site with your new account, but please don't forget to change it to something you will remember.</p>";
+        $message .= "<p>See you soon!</p><h3>The Kids' Academy family</h3>";
+        $headers  = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= 'From: newaccounts@kidsacademy.ac.th' . "\r\n" .
+                        'Reply-To: info@campusbike.ucc.ie' . "\r\n" .
+                        'X-Mailer: PHP/' . phpversion();
+
+        if(mail($this->getEmail(), $subject, $message, $headers)){
+            return true;
+        } else {
             return false;
         }
     }

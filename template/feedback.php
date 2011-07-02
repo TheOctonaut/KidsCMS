@@ -1,4 +1,4 @@
-<? if (isset($_REQUEST["msg"])){
+<? if (isset($_REQUEST["msg"]) && isset($lang)){
     ?><details id="feedback" class="feedback"><?php
     $msgs = $_REQUEST["msg"];
     if(is_array($msgs)){
