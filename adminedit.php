@@ -103,47 +103,66 @@ if($loggedin){
                             $valid = false;
                         }
                         if($valid){
-                            if($EditUser->save()){
+                            if(!$EditUser->save()){
                                 array_push($msgarray, "saved_user");
-                                moveOn("adminedit.php?", $msgarray);
                             } else {
-                                // TODO: show saving user error
+                                array_push($msgarray, "save_user_failed");
+                                $valid = false;
                             }
-                        } else {
-                            // TODO: return to editing page and show $msgarray
                         }
                         break;
                     case "groups":
                         $EditUserGroup = new UserGroup();
-
-                        $gid = "";
+                        // make us a user who's going to have the act done to them
+                        if(isset($_POST["user_group_name"])){
+                            if(!$EditUser->setName($_POST["name"])){
+                                array_push($msgarray, "invalid_name");
+                                $valid = false;
+                            }
+                        } else {
+                            array_push($msgarray, "invalid_name_not_set");
+                            $valid = false;
+                        }
                         if(isset($_POST["id"])){
                             if($_POST["id"] == "new"){
-                                $gid="new";
+                                if(!$EditGroup->setId("new")){
+                                    array_push($msgarray, "invalid_user_group_id");
+                                    $valid = false;
+                                }
                             } elseif(is_numeric($_POST["id"])){
-                                $gid = filter_var($_POST["id"], FILTER_SANITIZE_NUMBER_INT);
+                                if(!$EditGroup->setId(intval($_POST["id"]))){
+                                    array_push($msgarray, "invalid_user_group_id");
+                                    $valid = false;
+                                }
                             } else {
-                                $gid = -1;
+                                array_push($msgarray, "invalid_user_group_id");
+                                $valid = false;
                             }
                         } else {
-                            $gid = -1;
+                            array_push($msgarray, "invalid_user_group_id_not_set");
+                            $valid = false;
                         }
-                        $gname = isset($_POST["user_group_name"]) ? filter_var($_POST["user_group_name"], FILTER_SANITIZE_STRING) : false;
-                        $gpower = isset($_POST["user_group_power"]) ? filter_var($_POST["user_group_power"], FILTER_SANITIZE_NUMBER_INT) : false;
-                        if((is_numeric($gid) || $gid=="new") && $gname && $gpower >= 0 && $gpower <= 9){
-                            $EditUserGroup->setName($gname);
-                            $EditUserGroup->setPower($gpower);
-                            $EditUserGroup->setId($gid);
-                            if($EditUserGroup->save()){
-                                $extra = "?type=groups&message=saved_group";
-                                moveOn("adminview.php", $extra);
+                        if(isset($_POST["user_group_power"])){
+                            if(is_numeric($_POST["user_group_power"])){
+                                if(!$EditGroup->setPower(intval($_POST["contact_number"]))){
+                                    array_push($msgarray, "invalid_group_power");
+                                    $valid = false;
+                                }
                             } else {
-                                $extra = "?type=groups&id=" . $_POST["id"] . "&message=saved_group_error";
-                                moveOn("adminedit.php", $extra);
+                                array_push($msgarray, "invalid_group_power");
+                                $valid = false;
                             }
                         } else {
-                            $extra = "?type=groups&id=" . $_POST["id"] . "&message=must_complete_form";
-                            moveOn("adminedit.php", $extra);
+                           array_push($msgarray, "invalid_contact_number_not_set");
+                           $valid = false;
+                        }
+                        if($valid){
+                            if(!$EditUser->save()){
+                                array_push($msgarray, "saved_user");
+                            } else {
+                                array_push($msgarray, "save_user_failed");
+                                $valid = false;
+                            }
                         }
                         break;
                     case "articles": 
@@ -215,28 +234,42 @@ if($loggedin){
             case "delete":
                 $msgarray = array();
                 $valid = true;
+                $DeleteObject = "";
                 switch($_REQUEST["type"]){
                     case "users":
-                        if(isset($_REQUEST["id"])){
-                            if(is_numeric($_REQUEST["id"])){
-                                if($EditUser->setId(intval($_REQUEST["id"]))){
-                                    if($EditUser->delete()){
-                                        // success
-                                    }
-                                }
-                            }
-                        }
+                        $DeleteObject = new User();
                         break;
                     case "groups":
+                        $DeleteObject = new UserGroup();
                         break;
                     case "articles":
+                        $DeleteObject = new Article();
                         break;
                     case "sections":
+                        $DeleteObject = new Section();
                         break;
                     default:
                         // TODO: something sane if no real type set
                         break;
                 }
+                if(isset($_REQUEST["id"])){
+                    if(is_numeric($_REQUEST["id"])){
+                        if($DeleteObject->setId(intval($_REQUEST["id"]))){
+                            if($DeleteObject->delete()){
+                                array_push($msgarray, "delete_confirm");
+                            } else {
+                                array_push($msgarray, "delete_failed");
+                            }
+                        } else {
+                            array_push($msgarray, "delete_failed_invalid_id");
+                        }
+                    } else {
+                        array_push($msgarray, "delete_failed_invalid_id");
+                    }
+                } else {
+                    array_push($msgarray, "delete_failed_no_id");
+                }
+                moveOn("adminview", array("type"=>$_REQUEST["type"],"msg"=>$msgarray,"id" => $_REQUEST["id"]));
                 break;
             default:
                 // TODO: something sane if no real act set
