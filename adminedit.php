@@ -3,22 +3,7 @@ session_start();
 $loggedin = false;
 $subd = "/kidsacademy";
 require_once($_SERVER['DOCUMENT_ROOT'].$subd."/utilities.php");
-$langcode = "";
-if(isset($_GET["lang"])){
-    $langcode = mEx($_GET["lang"]);
-} elseif(isset($_COOKIE["lang"])){
-    $langcode = mEx($_COOKIE["lang"]);
-} else {
-    $langcode = "en-GB";
-}
-$lang = "";
-$langfilename = $_SERVER['DOCUMENT_ROOT'].$subd."/lang/".$langcode.".xml";
-if (file_exists($langfilename)) {
-    $lang = simplexml_load_file($langfilename);
-    setcookie('lang', $langcode);
-} else {
-    exit('Language File Not Found');
-}
+
 if(isset($_SESSION["id"])){
     $User = new User();
     if($User->getUserById($_SESSION["id"])){
@@ -27,6 +12,7 @@ if(isset($_SESSION["id"])){
             //echo "didnt get User";
     }
 }
+require_once("includes/lang.php");
 if($loggedin){
     // Check that the user has at least a power of 3.
     // In future this value might not be hard coded.
