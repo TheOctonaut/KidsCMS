@@ -4,14 +4,7 @@ $loggedin = false;
 $subd = "/kidsacademy";
 require_once($_SERVER['DOCUMENT_ROOT'].$subd."/utilities.php");
 require_once($_SERVER['DOCUMENT_ROOT'].$subd."/includes/lang.php");
-if(isset($_SESSION["id"])){
-	$User = new User();
-	if($User->getUserById($_SESSION["id"])){
-		$loggedin = true;
-	} else {
-		//echo "didnt get User";
-	}
-}
+require_once($_SERVER['DOCUMENT_ROOT'].$subd."/includes/sessioncontrol.php");
 ?><!DOCTYPE html>
 <html lang="en">
   <head>
