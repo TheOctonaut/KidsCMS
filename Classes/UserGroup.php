@@ -30,21 +30,27 @@ class UserGroup {
         }
 
         function getUserGroupById($id){
-                $status = false;
-                if(cb_connect()){
+            if(cb_connect()){
+                if(isset($id)){
                     $query = "SELECT * FROM user_groups WHERE id = " . $id;
                     $result = mysql_query($query);
                     if(mysql_num_rows($result) > 0){
-                            $row = mysql_fetch_row($result);
-                            $status = true;
-                            $this->setId($row[0]);
-                            $this->setName($row[1]);
-                            $this->setPower($row[2]);
+                        $row = mysql_fetch_row($result);
+                        $status = true;
+                        $this->setId($row[0]);
+                        $this->setName($row[1]);
+                        $this->setPower($row[2]);
+                        return true;
+                    } else {
+                        return false;
                     }
                 } else {
-                        error_log("DB Not Connected in UserGroup.php SELECT");
+                    return false;
                 }
-                return $status;
+            } else {
+                    error_log("DB Not Connected in UserGroup.php SELECT");
+                    return $status;
+            }
         }
 
         function save(){

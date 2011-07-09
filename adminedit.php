@@ -9,7 +9,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].$subd."/includes/sessioncontrol.php");
 if($loggedin){
     // Check that the user has at least a power of 3.
     // In future this value might not be hard coded.
-    if($User->getPower() >= 3){
+    if($power >= 2){
         switch($_REQUEST["act"]){
             case "save":
                 $msgarray = array();
@@ -343,7 +343,7 @@ if($loggedin){
       //include the header template
       include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/header.php");
       if ($loggedin){
-          if($User->getPower() >= 3){
+          if($power >= 2){
               //include the admin navigation template
               include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/nav_admin.php");
           } ?>
@@ -357,7 +357,7 @@ if($loggedin){
           <input id="act" name="act" type="hidden" value="save" />
           
       <?php
-        if($User->getPower() >= 3){
+        if($power >= 2){
             switch($_GET["type"]){
                 case "users":
                     if($_GET["id"] == "new"){

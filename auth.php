@@ -142,7 +142,7 @@ if(strlen($_REQUEST['act']) > 0){
         $user_password = $_REQUEST["password"];
         $User = new User();
         $extra = $User->login($email, $password, $_SERVER["REMOTE_ADDR"]);
-        moveOn("index.php", $extra);
+        moveOn("index", $extra);
     } elseif($_REQUEST["act"] == "logout"){
         session_destroy();
         moveOn("index.php");

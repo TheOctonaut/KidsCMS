@@ -46,7 +46,7 @@ if(isset($_SESSION["id"])){
       //include the header template
       include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/header.php");
       //include the navigation template
-      include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/nav.php"); ?>
+      //include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/nav.php"); ?>
       <section class="body">
     <?
         if (isset($_REQUEST["warn"])){

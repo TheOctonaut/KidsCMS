@@ -19,25 +19,17 @@ require_once($_SERVER['DOCUMENT_ROOT'].$subd."/includes/sessioncontrol.php");
       include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/header.php");
 
       if ($loggedin){
-          if($User->getPower() >= 3){
+          if($power >= 2){
               //include the admin navigation template
               include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/nav_admin.php");
           } ?>
       <section class="body">
-    <?
-        if (isset($_REQUEST["msg"])){
-            $strings = $lang->xpath($_REQUEST["msg"]);
-            while(list( , $node) = each($strings)) {
-                ?>
-                        <p><?php echo $node; ?></p>
-                <?
-            }
-        }?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/feedback.php");?>
           <?php echo $lang->greeting . " " . $User->getName() . " (" . $User->getEmail() . ") "; ?>
           <a href="auth.php?act=logout"><?php echo $lang->logout; ?></a>
       </p>
       <?php
-        if($User->getPower() >= 3){
+        if($power >= 2){
             switch($_REQUEST["type"]){
                 case "users":
                     $result = $User->listUsersNicely();
@@ -73,7 +65,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].$subd."/includes/sessioncontrol.php");
                 break;
             }
         } else {
-            echo "<p>" . $lang->no_permission . "</p>";
+            echo "<p>" . $lang->no_permission . $power . "</p>";
         }
       } else { ?>
             <h3><?php echo $lang->login; ?></h3>
@@ -92,7 +84,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].$subd."/includes/sessioncontrol.php");
             echo $lang->or; ?> <a href="register.php"><?php
             echo $lang->register;
             ?></a></p>
-<? } //end of logged out user ?>
+<?php } //end of logged out user ?>
 
       </section>
       <?php

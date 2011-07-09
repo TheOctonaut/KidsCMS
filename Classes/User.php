@@ -178,26 +178,26 @@ class User {
 	}
 
 	function getUserById($uid){
-		$status = false;
 		if(cb_connect()){
-			$query = "SELECT * FROM users WHERE id = " . $uid;
-			$result = mysql_query($query) or die(mysql_error());
-			if(mysql_num_rows($result) > 0){
-				$row = mysql_fetch_array($result);
-				$status = true;
-				$this->setId($row[0]);
-				$this->setName($row[1]);
-                                $this->setDisplayName($row[2]);
-				$this->setEmail($row[3]);
-				$this->setPassword($row[4]);
-				$this->setSalt($row[5]);
-                                $this->setUserGroup($row[6]);
-				$this->setContactNumber($row[9]);
-			}
+                    $query = "SELECT * FROM users WHERE id = " . $uid;
+                    $result = mysql_query($query) or die(mysql_error());
+                    if(mysql_num_rows($result) > 0){
+                        $row = mysql_fetch_array($result);
+                        $this->setId(intval($row[0]));
+                        $this->setName($row[1]);
+                        $this->setDisplayName($row[2]);
+                        $this->setEmail($row[3]);
+                        $this->setPassword($row[4]);
+                        $this->setSalt($row[5]);
+                        $this->setUserGroup(intval($row[6]));
+                        $this->setContactNumber($row[9]);
+                        return true;
+                    } else {
+                        return false;
+                    }
 		} else {
-			echo "DB Not Connected";
+                    return false;
 		}
-		return $status;
 	}
 	function delete(){
 		$status = false;
@@ -242,9 +242,9 @@ class User {
 					//successfully update last login time
 
 				}
-				$extra = "?loggedin=1";
+				$extra = "loggedin=1";
 			} else {
-				$extra = "?warn=loginfail";
+				$extra = "warn=loginfail";
 			}
                         }
 		} else {
