@@ -3,22 +3,7 @@ session_start();
 $loggedin = false;
 $subd = "/kidsacademy";
 require_once($_SERVER['DOCUMENT_ROOT'].$subd."/utilities.php");
-$langcode = "";
-if(isset($_GET["lang"])){
-    $langcode = mEx($_GET["lang"]);
-} elseif(isset($_COOKIE["lang"])){
-    $langcode = mEx($_COOKIE["lang"]);
-} else {
-    $langcode = "en-GB";
-}
-$lang = "";
-$langfilename = $_SERVER['DOCUMENT_ROOT'].$subd."/lang/".$langcode.".xml";
-if (file_exists($langfilename)) {
-    $lang = simplexml_load_file($langfilename);
-    setcookie('lang', $langcode);
-} else {
-    exit('Language File Not Found');
-}
+require_once($_SERVER['DOCUMENT_ROOT'].$subd."/includes/lang.php");
 if(isset($_SESSION["id"])){
 	$User = new User();
 	if($User->getUserById($_SESSION["id"])){
@@ -32,15 +17,8 @@ if(isset($_SESSION["id"])){
   <head>
     <title>Kids' Academy Testsite Admin</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen">
-    <link rel="stylesheet" href="css/default.css" type="text/css" media="screen">
-    <link rel="stylesheet" href="css/html5.css" type="text/css" media="screen">
-    <script type="text/javascript" src="js/prototype.js"></script>
-    <script type="text/javascript" src="js/scriptaculous.js"></script>
-    <script type="text/javascript" src="js/validation.js"></script>
-    <!--[if IE]>
-    	<script src="js/html5.js"></script>
-    <![endif]-->
+    <?php include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/css.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/css.php"); ?>
   </head>
   <body id="index" class="home">
       <?php

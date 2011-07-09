@@ -168,62 +168,124 @@ if($loggedin){
                     case "articles": 
                         $Article = new Article();
                         if(isset($_REQUEST["section_id"])){
-                            if($Article->setSection(intval())){
-                                //success
+                            if(is_numeric($_REQUEST["section_id"])){
+                                if(!$Article->setSection(intval())){
+                                    $valid=false;
+                                    array_push($msgarray, "invalid_article_section");
+                                }
                             } else {
-                                // add error to list of messages
+                                $valid=false;
+                                array_push($msgarray, "invalid_article_section");    
                             }
                         } else {
-                            // feedback
+                            $valid = false;
+                            array_push($msgarray, "invalid_article_section_not_set");
                         }
                         if(isset($_REQUEST["title"])){
-                            if($Article->setTitle($_REQUEST["title"])){
-                                //success
-                            } else {
-                                // error
+                            if(!$Article->setTitle($_REQUEST["title"])){
+                                $valid = false;
+                                array_push($msgarray, "invalid_article_title");
                             }
                         } else {
-                            // error
+                            $valid = false;
+                            array_push($msgarray, "invalid_article_title_not_set");
                         }
                         if(isset($_REQUEST["summary"])){
-                            if($Article->setSummary($_REQUEST["summary"])){
-                                // success
-                            } else {
-                                // error
+                            if(!$Article->setSummary($_REQUEST["summary"])){
+                                $valid = false;
+                                array_push($msgarray, "invalid_article_summary");
                             }
                         } else {
-                            // error
+                            $valid = false;
+                            array_push($msgarray, "invalid_article_summary_not_set");
                         }
                         if(isset($_REQUEST["content"])){
-                            if($Article->setContent($_REQUEST["content"])){
-                                // success
-                            } else {
-                                // error
+                            if(!$Article->setContent($_REQUEST["content"])){
+                                $valid = false;
+                                array_push($msgarray, "invalid_article_content");
                             }
                         } else {
-                            // error
+                            $valid = false;
+                            array_push($msgarray, "invalid_article_content_not_set");
                         }
                         if(isset($_REQUEST["author"])){
-                            if($Article->setUser(intval($_REQUEST["author"]))){
-                                // success
+                            if(is_numeric($_REQUEST["author"])){
+                                if(!$Article->setUser(intval($_REQUEST["author"]))){
+                                    $valid = false;
+                                    array_push($msgarray, "invalid_article_author");
+                                }
                             } else {
-                                // error
+                                $valid = false;
+                                array_push($msgarray, "invalid_article_author");
                             }
                         } else {
-                            // error
+                            $valid = false;
+                            array_push($msgarray, "invalid_article_author_not_set");
                         }
                         if(isset($_REQUEST["published"])){
-                            if($Article->setPublished($_REQUEST["published"])){
-                                // success
+                            if(is_numeric($_REQUEST["published"])){
+                                if(!$Article->setPublished(intval($_REQUEST["published"]))){
+                                    $valid = false;
+                                    array_push($msgarray, "invalid_article_published");
+                                }
                             } else {
-                                // error
+                                $valid = false;
+                                array_push($msgarray, "invalid_article_published");
                             }
                         } else {
-                            // error
+                            $valid = false;
+                            array_push($msgarray, "invalid_article_published_not_set");
+                        }
+                        if($valid){
+                            if($Article->save()){
+                                array_push($msgarray, "article_saved");
+                            } else {
+                                $valid = false;
+                                array_push($msgarray, "article_save_error");
+                            }
                         }
                         break;
                     case "sections":
                         $Section= new Section();
+                        if(isset($_REQUEST["name"])){
+                            if(!$Section->setName($v)){
+                                $valid = false;
+                                array_push($msgarray, "invalid_section_name");
+                            }
+                        } else {
+                            $valid = false;
+                            array_push($msgarray, "invalid_section_name_not_set");
+                        }
+                        if(isset($_REQUEST["summary"])){
+                            if(!$Section->setSummary($_REQUEST["summary"])){
+                                $valid = false;
+                                array_push($msgarray, "invalid_section_summary");
+                            }
+                        } else {
+                            $valid = false;
+                            array_push($msgarray, "invalid_section_summary_not_set");
+                        }
+                        if(isset($_REQUEST["media"])){
+                            if(is_numeric($_REQUEST["media"])){
+                                if(!$Section->setMedia(intval($_REQUEST["media"]))){
+                                    $valid = false;
+                                    array_push($msgarray, "invalid_section_media");
+                                }
+                            } else {
+                                $valid = false;
+                                array_push($msgarray, "invalid_section_media");
+                            }
+                        } else {
+                            $valid = false;
+                            array_push($msgarray, "invalid_section_media_not_set");
+                        }
+                        if($valid){
+                            if($Section->save()){
+                                array_push($msgarray, "section_saved");
+                            } else {
+                                $valid = false;
+                            }
+                        }
                         break;
                     default:
                         // TODO: something sane if no real type set
