@@ -3,16 +3,8 @@ session_start();
 $loggedin = false;
 $subd = "/kidsacademy";
 require_once($_SERVER['DOCUMENT_ROOT'].$subd."/utilities.php");
-
-if(isset($_SESSION["id"])){
-    $User = new User();
-    if($User->getUserById($_SESSION["id"])){
-            $loggedin = true;
-    } else {
-            //echo "didnt get User";
-    }
-}
-require_once("includes/lang.php");
+require_once($_SERVER['DOCUMENT_ROOT'].$subd."/includes/lang.php");
+require_once($_SERVER['DOCUMENT_ROOT'].$subd."/includes/sessioncontrol.php");
 
 if($loggedin){
     // Check that the user has at least a power of 3.
@@ -343,8 +335,8 @@ if($loggedin){
   <head>
     <title>Kids' Academy - <?php echo $lang->title_admin_edit; ?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <?php include_once("template/css.php"); ?>
-    <?php include_once("template/js.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/css.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/js.php"); ?>
   </head>
   <body id="index" class="home">
       <?php

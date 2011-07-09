@@ -11,7 +11,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].$subd."/includes/sessioncontrol.php");
     <title>Kids' Academy Testsite Admin</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <?php include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/css.php"); ?>
-    <?php include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/css.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/js.php"); ?>
   </head>
   <body id="index" class="home">
       <?php

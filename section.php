@@ -3,43 +3,15 @@ session_start();
 $loggedin = false;
 $subd = "/kidsacademy";
 require_once($_SERVER['DOCUMENT_ROOT'].$subd."/utilities.php");
-$langcode = "";
-if(isset($_GET["lang"])){
-    $langcode = mEx($_GET["lang"]);
-} elseif(isset($_COOKIE["lang"])){
-    $langcode = mEx($_COOKIE["lang"]);
-} else {
-    $langcode = "en-GB";
-}
-$lang = "";
-$langfilename = $_SERVER['DOCUMENT_ROOT'].$subd."/lang/".$langcode.".xml";
-if (file_exists($langfilename)) {
-    $lang = simplexml_load_file($langfilename);
-    setcookie('lang', $langcode);
-} else {
-    exit('Language File Not Found');
-}
-if(isset($_SESSION["id"])){
-	$User = new User();
-	if($User->getUserById($_SESSION["id"])){
-		$loggedin = true;
-	} else {
-		//echo "didnt get User";
-	}
-}
+require_once($_SERVER['DOCUMENT_ROOT'].$subd."/includes/lang.php");
+require_once($_SERVER['DOCUMENT_ROOT'].$subd."/includes/sessioncontrol.php");
 ?><!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Kids' Academy Testsite</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen">
-    <link rel="stylesheet" href="css/default.css" type="text/css" media="screen">
-    <link rel="stylesheet" href="css/html5.css" type="text/css" media="screen">
-    <script type="text/javascript" src="js/prototype.js"></script>
-    <script type="text/javascript" src="js/scriptaculous.js"></script>
-    <!--[if IE]>
-    	<script src="js/html5.js"></script>
-    <![endif]-->
+    <?php include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/css.php"); ?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/js.php"); ?>
   </head>
   <body id="index" class="home">
       <?php
@@ -48,22 +20,7 @@ if(isset($_SESSION["id"])){
       //include the navigation template
       include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/nav.php"); ?>
       <section class="body">
-    <?
-        if (isset($_REQUEST["warn"])){
-                if($_REQUEST["warn"] == "loginfail"){
-                ?>
-                        <p><?php echo $lang->loginfail; ?></p>
-                <?
-                }
-        }
-        if (isset($_REQUEST["msg"])){
-            $strings = $lang->xpath($_REQUEST["msg"]);
-            while(list( , $node) = each($strings)) {
-                ?>
-                        <p><?php echo $node; ?></p>
-                <?
-            }
-        }?>
+    <?php include_once($_SERVER['DOCUMENT_ROOT'].$subd."/template/feedback.php"); ?>
       <?php if ($loggedin){ ?>
           <p>
               <?php echo $lang->greeting . " " . $User->getName() . " (" . $User->getEmail() . ") "; ?>
