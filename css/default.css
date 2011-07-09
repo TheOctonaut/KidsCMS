@@ -21,6 +21,20 @@ body.home header {
     clear: both; margin: 0 auto; width: 800px;
     margin-bottom: 5px;
 }
+#linearBg2 { 
+    /* fallback */
+    background-color: #1a82f7;
+    /*background: url(images/linear_bg_2.png);*/
+    background-repeat: repeat-x;
+    /* Firefox 3.6+ */
+    background: -moz-linear-gradient(100% 100% 90deg, #2F2727, #1a82f7);
+    /* Safari 4-5, Chrome 1-9 */
+    /* -webkit-gradient(<type>, <point> [, <radius>]?, <point> [, <radius>]? [, <stop>]*) */
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#1a82f7), to(#2F2727)); 
+    /* Safari 5.1+, Chrome 10+ */ 
+    background: -webkit-linear-gradient(#2F2727, #1a82f7);
+    /* Opera 11.10+ */
+    background: -o-linear-gradient(#2F2727, #1a82f7); }
 .body h3 {
     margin-bottom:1em;
     margin-top:2em;
