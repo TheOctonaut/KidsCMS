@@ -137,74 +137,92 @@ nav.cloud ul li{
     min-height: 25px;
     text-shadow: 2px 2px 2px #aaaaaa;
 }
-nav.cloud ul li:nth-child(1) {
-    padding-top: 100px;
+nav.cloud ul li:first-child {
+    padding-top: 60px;
     padding-bottom: 0px;
     background-repeat: no-repeat;
-    background-position: 0px 75px;
+    background-position: 0px 35px;
     background-image: url(http://mononyk.us/kidsacademy/img/orangecircle.png);
     z-index: 9;
 }
-nav.cloud ul li:nth-child(1):hover {
-    padding-top: 80px;
-    padding-bottom: 20px;
+nav.cloud ul li:first-child:hover {
+    padding-top: 35px;
+    padding-bottom: 25px;
     background-repeat: no-repeat;
-    background-position: 0px 55px;
+    background-position: 0px 15px;
     background-image: url(http://mononyk.us/kidsacademy/img/orangecircle.png);
     z-index: 10;
 }
-nav.cloud ul li:nth-child(2) {
+nav.cloud ul li:first-child + li {
     margin-left: -10px;
-    padding-top:89px;
+    padding-top:49px;
     padding-bottom:10px;
     background-repeat: no-repeat;
-    background-position: 0px 75px;
+    background-position: 0px 35px;
     background-image: url(http://mononyk.us/kidsacademy/img/greenrectangle.png);
     z-index: 5;
 }
-nav.cloud ul li:nth-child(2):hover {
+nav.cloud ul li:first-child + li:hover {
     margin-left: -10px;
-    padding-top:79px;
+    padding-top:39px;
     padding-bottom: 20px;
     background-repeat: no-repeat;
-    background-position: 0px 55px;
+    background-position: 0px 15px;
     background-image: url(http://mononyk.us/kidsacademy/img/greenrectangle.png);
     z-index: 10;
 }
-nav.cloud ul li:nth-child(3) {
+nav.cloud ul li:first-child + li + li {
     margin-left: -10px;
-    padding-top:89px;
+    padding-top:49px;
     padding-bottom: 10px;
     background-repeat: no-repeat;
-    background-position: 0px 55px;
+    background-position: 0px 15px;
     background-image: url(http://mononyk.us/kidsacademy/img/bluetriangle.png);
     z-index: 2;
 }
-nav.cloud ul li:nth-child(3):hover {
+nav.cloud ul li:first-child + li + li:hover {
     margin-left: -10px;
-    padding-top:69px;
+    padding-top:29px;
     padding-bottom: 30px;
     background-repeat: no-repeat;
-    background-position: 0px 35px;
+    background-position: 0px 0px;
     background-image: url(http://mononyk.us/kidsacademy/img/bluetriangle.png);
     z-index: 10;
 } 
 nav.cloud ul li#gallery {
-    padding-top: 100px;
+    padding-top: 60px;
     padding-bottom: 0px;
     margin-left:-15px;
     background-repeat: no-repeat;
-    background-position: 0px 55px;
+    background-position: 0px 15px;
     background-image: url(http://mononyk.us/kidsacademy/img/yellowstar.png);
     z-index: 9;
 }
 nav.cloud ul li#gallery:hover {
-    padding-top: 80px;
+    padding-top: 45px;
+    padding-bottom: 15px;
+    margin-left: -15px;
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+    background-image: url(http://mononyk.us/kidsacademy/img/yellowstar.png);
+    z-index: 10;
+}
+nav.cloud ul li#contact {
+    padding-top: 60px;
+    padding-bottom: 0px;
+    margin-left:-15px;
+    background-repeat: no-repeat;
+    background-position: 0px 35px;
+    background-image: url(http://mononyk.us/kidsacademy/img/skybluecircle.png);
+    z-index: 6;
+}
+nav.cloud ul li#contact:hover {
+    padding-top: 40px;
     padding-bottom: 20px;
     margin-left: -15px;
     background-repeat: no-repeat;
-    background-position: 0px 35px;
-    background-image: url(http://mononyk.us/kidsacademy/img/yellowstar.png);
+    background-position: 0px 15px;
+    background-image: url(http://mononyk.us/kidsacademy/img/skybluecircle.png);
     z-index: 10;
 }
 nav.cloud ul li a {
@@ -217,4 +235,52 @@ menu.manage_options {
 }
 menu.manage_options li {
     float:left;
+}
+ul#langselect {
+padding-top:20px;
+height:20px;
+float:right;
+color:white;
+font-size:0.9em;
+text-shadow: 2px 2px 2px #aaaaaa;
+list-style:none;
+}
+ul#langselect li {
+float:left;
+}
+ul#langselect li.flag {
+margin-left:5px;
+}
+ul#langselect li.flag img {
+vertical-align:baseline;
+}
+.splash {
+    margin-bottom:0px !important;
+}
+p.signature {
+    vertical-align: middle;
+    width:800px;
+    text-align: right;
+    font-size:1em;
+    color:#555555;
+    font-family: 'Tangerine', serif !important;
+}
+p.signature a {
+    color:#222222;
+    text-shadow:2px 2px 2px #aaaaaa;
+    font-family: 'Tangerine', serif;
+    text-decoration: none;
+}
+p.signature a:visited {
+    color:#222222;
+    text-shadow:2px 2px 2px #aaaaaa;
+    font-family: 'Tangerine', serif;
+    
+    text-decoration: none;
+}
+p.signature a:hover {
+    color:#222222;
+    text-shadow:2px 2px 2px #aaaaaa;
+    font-family: 'Tangerine', serif;
+    text-decoration: underline;
 }

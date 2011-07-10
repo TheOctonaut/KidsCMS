@@ -27,7 +27,9 @@ require_once($_SERVER['DOCUMENT_ROOT'].$subd."/includes/sessioncontrol.php");
               <a href="auth.php?act=logout"><?php echo $lang->logout; ?></a>
           </p>
           <?php $Section = new Section();
-          $Section->getSectionById(filter_var($_GET["id"], FILTER_SANITIZE_NUMBER_INT));
+          if(is_numeric($_GET["id"])){
+            $Section->getSectionById(intval($_GET["id"]));
+          }
           ?>
           <h2><?php echo $Section->getName(); ?></h2><details><summary><?php echo $Section->getSummary(); ?></summary></details>
           <h3>Articles in this Section</h3>

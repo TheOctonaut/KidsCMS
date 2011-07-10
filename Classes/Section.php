@@ -69,24 +69,25 @@ class Section {
     }
 
     function getSectionById($id) {
-        $status = false;
         if (cb_connect()) {
             $query = "SELECT * FROM sections WHERE id = " . $id . " LIMIT 0,1";
             $result = mysql_query($query);
             if (mysql_num_rows($result) > 0) {
                 $row = mysql_fetch_assoc($result);
-                $this->setId($row["id"]);
+                $this->setId(intval($row["id"]));
                 $this->setName($row["name"]);
                 $this->setSummary($row["summary"]);
-                $this->setMenuOrder($row["menu_order"]);
-                $this->setIcon($row["icon"]);
-                $this->setMedia($row["media"]);
-                $status = true;
+                $this->setMenuOrder(intval($row["menu_order"]));
+                $this->setIcon(intval($row["icon"]));
+                $this->setMedia(intval($row["media"]));
+                return true;
+            } else {
+                return false;
             }
         } else {
             error_log("DB Not Connected in UserGroup.php SELECT");
+            return false;
         }
-        return $status;
     }
 
     function save() {
@@ -194,14 +195,14 @@ class Section {
                             while($r = mysql_fetch_array($result)){
                                 //assign values to an article object
                                 $art =& new Article();
-                                $art->setId($row['id']);
+                                $art->setId(intval($row['id']));
                                 $art->setTitle($row['title']);
                                 $art->setSummary($row['summary']);
                                 $articles[]=$art;
                             }
                             return $articles;
                         } else {
-                            throw new Exception("No results.");
+                            return false;
                         }
                     } else {
                         throw new Exception("Invalid ID");
